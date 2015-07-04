@@ -22,9 +22,26 @@ function send_curl($url) {
     // Close connection
     curl_close($ch);
 }
+function build_farm_message($currentfarm) {
+	include 'dbAccess.php';
+	$db = dbAccess::getInstance();
+	$reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
+');
+	$reply .= urlencode('Farm creator - ' . $currentfarm['creator'] .'
+');
+        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
+        $farmers = $db->loadAssocList();
+        $i = 1;
+        foreach ($farmers as $farmer) {
+            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
+');
+            $i++;
+        }
+    return $reply;
+}
 function send_response($input_raw) {
     include 'dbAccess.php';
-    $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya');
+    $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
     /*$input_raw = '{
@@ -42,11 +59,10 @@ function send_response($input_raw) {
                           "title": "Bottest"
                         },
                         "date": 1435508622,
-                        "text": "/removefarmer @SLpooh"
+                        "text": "/addfarmer @RamdeshLota"
                       }
                     }';*/
     $messageobj = json_decode($input_raw, true);
-    print_r($messageobj);
     $message_txt_parts = explode(' ', $messageobj['message']['text']);
     $chat_id = $messageobj['message']['chat']['id'];
     $reply = '';
@@ -66,16 +82,7 @@ function send_response($input_raw) {
             send_curl(build_response($chat_id, $reply));
             return;
         }
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-             ');
-            $i++;
-        }
+        $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
 
@@ -92,23 +99,23 @@ function send_response($input_raw) {
         $farmer_name = '@' . $messageobj['message']['from']['username'];
         if ($farmer_name == '@sirStinkySocks') {
             $reply .= urlencode('Welonde Uncle!!
-            ');
+');
         }
         if ($farmer_name == '@SLpooh') {
             $reply .= urlencode('Gus n galz v r settng up framing fr 2day.
-            ');
+');
         }
         if (!empty($message_txt_parts[1])) {
             $location = $message_txt_parts[1];
         } else {
             $reply .= urlencode('You might want to set a location for the farm using /setfarmlocation LOCATION_NAME.
-            ');
+');
         }
         if (!empty($message_txt_parts[2]) && !empty($message_txt_parts[3])) {
             $time = $message_txt_parts[2] . ' ' . $message_txt_parts[3];
         } else {
             $reply .= urlencode('You might want to set a date and time for the farm using /setfarmtime DATE TIME.
-            ');
+');
         }
         $farm = new stdClass();
         $farm->date_and_time = $time;
@@ -119,7 +126,7 @@ function send_response($input_raw) {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
-        1. ' . $farmer_name);
+1. ' . $farmer_name);
         $farmer = new stdClass();
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
@@ -149,16 +156,7 @@ function send_response($input_raw) {
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
         $db->insertObject('farmers', $farmer);
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-            ');
-            $i++;
-        }
+        $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -179,16 +177,7 @@ function send_response($input_raw) {
             return;
         }
         $db->setQuery("delete from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id'])->loadResult();
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-            ');
-            $i++;
-        }
+        $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -202,8 +191,8 @@ function send_response($input_raw) {
         }
         $deleter_name = '@' . $messageobj['message']['from']['username'];
         if (($deleter_name != $currentfarm['creator'])
-            && ($deleter_name != '@RamdeshLota')) {
-            $reply = urlencode($deleter_name . ', you are not my Creator, nor are you my Father. You cannot delete me.');
+            && ($deleter_name != '@RamdeshLota') && ($deleter_name != '@CMNisal')) {
+            $reply = urlencode($deleter_name . ', you are not my Creator or my Uncle, nor are you my Father. You cannot delete me.');
             send_curl(build_response($chat_id, $reply));
             return;
         }
@@ -229,17 +218,8 @@ function send_response($input_raw) {
         $farm->location = $location;
         $db->updateObject('farms', $farm, 'id');
         $reply .= urlencode('Set farm location to '. $location .'
-        ');
-        $reply .= urlencode('Current farm - ' . $location . ' ' . $currentfarm['date_and_time'] . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-             ');
-            $i++;
-        }
+');
+        $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -257,17 +237,8 @@ function send_response($input_raw) {
         $farm->date_and_time = $date_and_time;
         $db->updateObject('farms', $farm, 'id');
         $reply .= urlencode('Set farm date and time to '. $date_and_time .'
-        ');
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $date_and_time . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-             ');
-            $i++;
-        }
+');
+       $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -287,7 +258,7 @@ function send_response($input_raw) {
         }
         if ($farmer_name == '@Cyan017'){
             $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!
-            ');
+');
         }
         $db->setQuery("select * from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id']);
         $farmeravailable = $db->loadAssoc();
@@ -300,16 +271,7 @@ function send_response($input_raw) {
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
         $db->insertObject('farmers', $farmer);
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-            ');
-            $i++;
-        }
+        $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -329,7 +291,7 @@ function send_response($input_raw) {
         }
         if ($farmer_name == '@Cyan017'){
             $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!
-            ');
+');
         }
         $db->setQuery("select * from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id']);
         $farmeravailable = $db->loadAssoc();
@@ -339,16 +301,7 @@ function send_response($input_raw) {
             return;
         }
         $db->setQuery("delete from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id'])->loadResult();
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
-        ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
-        $farmers = $db->loadAssocList();
-        $i = 1;
-        foreach ($farmers as $farmer) {
-            $reply .= urlencode($i . '. ' . $farmer['farmer_name'] . '
-            ');
-            $i++;
-        }
+        $reply .= build_farm_message($currentfarm);
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -369,5 +322,3 @@ function send_response($input_raw) {
 }
 
 send_response(file_get_contents('php://input'));
-
-
