@@ -42,6 +42,7 @@ function build_farm_message($currentfarm) {
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
+    $verified = array(-34025370,-15987932);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
     /*$input_raw = '{
@@ -62,6 +63,10 @@ function send_response($input_raw) {
                         "text": "/addfarmer @RamdeshLota"
                       }
                     }';*/
+    // let's log the raw JSON message first
+    $log = new stdClass();
+    $log->message_text = $input_raw;
+    $db->insertObject('message_log', $log);
     $messageobj = json_decode($input_raw, true);
     $message_txt_parts = explode(' ', $messageobj['message']['text']);
     $chat_id = $messageobj['message']['chat']['id'];
