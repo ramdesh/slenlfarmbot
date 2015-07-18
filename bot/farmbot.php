@@ -22,10 +22,12 @@ function send_curl($url) {
     // Close connection
     curl_close($ch);
 }
-function build_farm_message($currentfarm) {
-	include 'dbAccess.php';
+function build_farm_message() {
+	include_once ('dbAccess.php');
 	$db = dbAccess::getInstance();
-	$reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
+    $db->setQuery('select * from farms where current=1');
+    $currentfarm = $db->loadAssoc();
+	$reply = urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
 ');
 	$reply .= urlencode('Farm creator - ' . $currentfarm['creator'] .'
 ');
@@ -39,10 +41,39 @@ function build_farm_message($currentfarm) {
         }
     return $reply;
 }
+function easter_eggs($farmer_name) {
+    $reply = "";
+
+    if ($farmer_name == '@sirStinkySocks') {
+        $reply .= urlencode('Welonde Uncle!!
+');
+    }
+    if ($farmer_name == '@SLpooh') {
+        $reply .= urlencode('Gus n galz v r settng up framing fr 2day.
+');
+    }
+    if ($farmer_name == '@thushethan') {
+        $reply .= urlencode('This Bot has been verified by the SL ENL Security Experts Incompetency Group (SESEIG™).
+');
+    }
+    if ($farmer_name == '@ultrasn0w') {
+        $reply .= urlencode('Strike Team Ultra! Mobilize!!!
+');
+    }
+    if ($farmer_name == '@jaze87') {
+        $reply .= urlencode('Hey @jaze87! We are still waiting for your watalappan!!!
+');
+    }
+    if ($farmer_name == '@kulendraj') {
+        $reply .= urlencode('The General is coming for farming. Sh*t just got serious.
+');
+    }
+    return $reply;
+}
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
-    $verified = array(-34025370,-15987932);
+    $verified = array(-34025370, -15987932, -39583346);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
     /*$input_raw = '{
@@ -53,14 +84,14 @@ function send_response($input_raw) {
                           "id": 63477295,
                           "first_name": "Ramindu \"RamdeshLota\"",
                           "last_name": "Deshapriya",
-                          "username": "SLpooh"
+                          "username": "kulendraj"
                         },
                         "chat": {
                           "id": -34025370,
                           "title": "Bottest"
                         },
                         "date": 1435508622,
-                        "text": "/addfarmer @RamdeshLota"
+                        "text": "/addfarmer @ultrasn0w"
                       }
                     }';*/
     // let's log the raw JSON message first
@@ -79,6 +110,11 @@ function send_response($input_raw) {
             return;
         }
     }
+    if (!in_array($chat_id, $verified)) {
+        $reply = urlencode('As requested by the SL ENL Security Experts Incompetency Group (SESEIG™), this bot can no longer be used in unverified groups. If you need to have a particular group added to the verified list, talk to @RamdeshLota.');
+        send_curl(build_response($chat_id, $reply));
+        return;
+    }
     if ($message_txt_parts[0] == '/farming') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
@@ -87,7 +123,7 @@ function send_response($input_raw) {
             send_curl(build_response($chat_id, $reply));
             return;
         }
-        $reply .= build_farm_message($currentfarm);
+        $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
 
@@ -102,14 +138,7 @@ function send_response($input_raw) {
         }
         $time = $location = '';
         $farmer_name = '@' . $messageobj['message']['from']['username'];
-        if ($farmer_name == '@sirStinkySocks') {
-            $reply .= urlencode('Welonde Uncle!!
-');
-        }
-        if ($farmer_name == '@SLpooh') {
-            $reply .= urlencode('Gus n galz v r settng up framing fr 2day.
-');
-        }
+        $reply .= easter_eggs($farmer_name);
         if (!empty($message_txt_parts[1])) {
             $location = $message_txt_parts[1];
         } else {
@@ -157,11 +186,12 @@ function send_response($input_raw) {
             send_curl(build_response($chat_id, $reply));
             return;
         }
+        $reply .= easter_eggs($farmer_name);
         $farmer = new stdClass();
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
         $db->insertObject('farmers', $farmer);
-        $reply .= build_farm_message($currentfarm);
+        $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -182,7 +212,7 @@ function send_response($input_raw) {
             return;
         }
         $db->setQuery("delete from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id'])->loadResult();
-        $reply .= build_farm_message($currentfarm);
+        $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -224,7 +254,8 @@ function send_response($input_raw) {
         $db->updateObject('farms', $farm, 'id');
         $reply .= urlencode('Set farm location to '. $location .'
 ');
-        $reply .= build_farm_message($currentfarm);
+
+        $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -243,7 +274,7 @@ function send_response($input_raw) {
         $db->updateObject('farms', $farm, 'id');
         $reply .= urlencode('Set farm date and time to '. $date_and_time .'
 ');
-       $reply .= build_farm_message($currentfarm);
+       $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -272,11 +303,12 @@ function send_response($input_raw) {
             send_curl(build_response($chat_id, $reply));
             return;
         }
+        $reply .= easter_eggs($farmer_name);
         $farmer = new stdClass();
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
         $db->insertObject('farmers', $farmer);
-        $reply .= build_farm_message($currentfarm);
+        $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
@@ -306,7 +338,7 @@ function send_response($input_raw) {
             return;
         }
         $db->setQuery("delete from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id'])->loadResult();
-        $reply .= build_farm_message($currentfarm);
+        $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
