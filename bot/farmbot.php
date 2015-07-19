@@ -100,6 +100,7 @@ function send_response($input_raw) {
     $db->insertObject('message_log', $log);
     $messageobj = json_decode($input_raw, true);
     $message_txt_parts = explode(' ', $messageobj['message']['text']);
+    $request_message = $message_txt_parts[0];
     $chat_id = $messageobj['message']['chat']['id'];
     $reply = '';
     //check for swear words
@@ -115,7 +116,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/farming') {
+    if ($request_message == '/farming' || $request_message == '/farming@SLEnlFarmBot') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -128,7 +129,7 @@ function send_response($input_raw) {
         return;
 
     }
-    if ($message_txt_parts[0] == '/createfarm') {
+    if ($request_message == '/createfarm') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (!empty($currentfarm)) {
@@ -170,7 +171,7 @@ function send_response($input_raw) {
 
 
     }
-    if ($message_txt_parts[0] == '/addmetofarm') {
+    if ($request_message == '/addmetofarm' || $request_message == '/addmetofarm@SLEnlFarmBot') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -195,7 +196,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/removemefromfarm') {
+    if ($request_message == '/removemefromfarm' || $request_message == '/removemefromfarm@SLEnlFarmBot') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -216,7 +217,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/deletefarm') {
+    if ($request_message == '/deletefarm' || $request_message == '/delefarm@SLEnlFarmBot') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -239,7 +240,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/setfarmlocation') {
+    if ($request_message == '/setfarmlocation') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -259,7 +260,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/setfarmtime') {
+    if ($request_message == '/setfarmtime') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -278,7 +279,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/addfarmer') {
+    if ($request_message == '/addfarmer') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -312,7 +313,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/removefarmer') {
+    if ($request_message == '/removefarmer') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
@@ -342,7 +343,7 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($message_txt_parts[0] == '/help') {
+    if ($request_message == '/help' || $request_message == '/help@SLEnlFarmBot') {
         $reply = urlencode('This is the SL ENL Farming Bot created by @RamdeshLota. Commands:
 /createfarm LOCATION DATE TIME - Creates a new farm.
 /addmetofarm - Adds you to the current farm.
