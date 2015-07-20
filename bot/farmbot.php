@@ -343,11 +343,11 @@ function send_response($input_raw) {
         return;
     }
     if ($request_message == '/changerequest' || $request_message == '/changerequest@SLEnlFarmBot') {
-    	$reply = urlencode('Dear Enlightened LK member, 
-    			Your suggestion for improvement has been received and will be processed in the distant future (although this is unlikely). 
-    			In the meantime, please be sure to obtain approval from the SL ENL Security Experts Incompetency Group (SESEIG™), 
-    			as there may be unforeseen and unfathomable dangers associated with your change request. 
-    			Thank you!');
+    	$reply = urlencode('Dear Enlightened LK member,
+Your suggestion for improvement has been received and will be processed in the distant future (although this is unlikely). 
+In the meantime, please be sure to obtain approval from the SL ENL Security Experts Incompetency Group (SESEIG™), 
+as there may be unforeseen and unfathomable dangers associated with your change request. 
+Thank you!');
     	send_curl(build_response($chat_id, $reply));
     	return;
     }
