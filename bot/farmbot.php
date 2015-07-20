@@ -328,8 +328,7 @@ function send_response($input_raw) {
             return;
         }
         if ($farmer_name == '@Cyan017'){
-            $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!
-');
+            $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
         }
         $db->setQuery("select * from farmers where farmer_name='$farmer_name' and farm_id=" . $currentfarm['id']);
         $farmeravailable = $db->loadAssoc();
@@ -343,6 +342,15 @@ function send_response($input_raw) {
         send_curl(build_response($chat_id, $reply));
         return;
     }
+    if ($request_message == '/changerequest' || $request_message == '/changerequest@SLEnlFarmBot') {
+    	$reply = urlencode('Dear Enlightened LK member, 
+    			Your suggestion for improvement has been received and will be processed in the distant future (although this is unlikely). 
+    			In the meantime, please be sure to obtain approval from the SL ENL Security Experts Incompetency Group (SESEIG™), 
+    			as there may be unforeseen and unfathomable dangers associated with your change request. 
+    			Thank you!');
+    	send_curl(build_response($chat_id, $reply));
+    	return;
+    }
     if ($request_message == '/help' || $request_message == '/help@SLEnlFarmBot') {
         $reply = urlencode('This is the SL ENL Farming Bot created by @RamdeshLota. Commands:
 /createfarm LOCATION DATE TIME - Creates a new farm.
@@ -353,6 +361,7 @@ function send_response($input_raw) {
 /setfarmlocation LOCATION - Sets the location for the current farm.
 /setfarmtime DATE TIME - Sets the date and time for the current farm.(e.g. "Today 6pm")
 /deletefarm - Deletes the current farm.
+/changerequest - Suggest a change to the bot.        		
 /help - Display this help text.');
         send_curl(build_response($chat_id, $reply));
         return;
