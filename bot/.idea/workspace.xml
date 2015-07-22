@@ -41,32 +41,33 @@
       <file leaf-file-name="farmbot.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/farmbot.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41714287" vertical-offset="5913" max-vertical-offset="7395">
-              <caret line="365" column="8" selection-start-line="365" selection-start-column="8" selection-end-line="365" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.5692996" vertical-offset="7268" max-vertical-offset="7956">
+              <caret line="450" column="16" selection-start-line="450" selection-start-column="16" selection-end-line="450" selection-end-column="16" />
               <folding>
                 <element signature="e#6#96#0#PHP" expanded="true" />
-                <marker date="1437592531689" expanded="true" signature="800:835" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="1082:1118" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="4550:4585" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="5063:5098" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="6370:6405" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="6957:6992" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="7382:7455" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="8395:8430" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="8820:8893" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="9368:9439" placeholder="delete from ..." />
-                <marker date="1437592531689" expanded="true" signature="9711:9746" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="10835:10870" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="11636:11671" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="12484:12519" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="13298:13371" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="14059:14094" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="14871:14944" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="15242:15313" placeholder="delete from ..." />
-                <marker date="1437592531689" expanded="true" signature="16376:16411" placeholder="select * fro..farms..." />
-                <marker date="1437592531689" expanded="true" signature="16897:16973" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="17294:17367" placeholder="select * fro..farmers..." />
-                <marker date="1437592531689" expanded="true" signature="17876:17949" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="1093:1128" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="1375:1411" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="4831:4866" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="5344:5379" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="6651:6686" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="7238:7273" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="7663:7736" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="8676:8711" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="9101:9174" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="9649:9720" placeholder="delete from ..." />
+                <marker date="1437597313442" expanded="true" signature="9992:10027" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="11116:11151" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="11917:11952" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="12765:12800" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="13579:13652" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="14340:14375" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="15152:15225" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="15523:15594" placeholder="delete from ..." />
+                <marker date="1437597313442" expanded="true" signature="16658:16693" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="17849:17884" placeholder="select * fro..farms..." />
+                <marker date="1437597313442" expanded="true" signature="18370:18446" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="18767:18840" placeholder="select * fro..farmers..." />
+                <marker date="1437597313442" expanded="true" signature="19349:19422" placeholder="select * fro..farmers..." />
               </folding>
             </state>
           </provider>
@@ -247,28 +248,29 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#6#96#0#PHP" expanded="true" />
-            <marker date="1437592531689" expanded="true" signature="800:835" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="1082:1118" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="4550:4585" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="5063:5098" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6370:6405" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6957:6992" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="7382:7455" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="8395:8430" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="8820:8893" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="9368:9439" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="9711:9746" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="10835:10870" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="11636:11671" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="12484:12519" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="13298:13371" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="14059:14094" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="14871:14944" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="15242:15313" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="16376:16411" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="16897:16973" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17294:17367" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17876:17949" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="1093:1128" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="1375:1411" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="4831:4866" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="5344:5379" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="6651:6686" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7238:7273" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7663:7736" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="8676:8711" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="9101:9174" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="9649:9720" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="9992:10027" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11116:11151" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11917:11952" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="12765:12800" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="13579:13652" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="14340:14375" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="15152:15225" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="15523:15594" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="16658:16693" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="17849:17884" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="18370:18446" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="18767:18840" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="19349:19422" placeholder="select * fro..farmers..." />
           </folding>
         </state>
       </provider>
@@ -287,28 +289,29 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#6#96#0#PHP" expanded="true" />
-            <marker date="1437592531689" expanded="true" signature="800:835" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="1082:1118" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="4550:4585" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="5063:5098" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6370:6405" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6957:6992" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="7382:7455" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="8395:8430" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="8820:8893" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="9368:9439" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="9711:9746" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="10835:10870" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="11636:11671" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="12484:12519" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="13298:13371" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="14059:14094" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="14871:14944" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="15242:15313" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="16376:16411" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="16897:16973" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17294:17367" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17876:17949" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="1093:1128" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="1375:1411" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="4831:4866" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="5344:5379" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="6651:6686" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7238:7273" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7663:7736" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="8676:8711" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="9101:9174" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="9649:9720" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="9992:10027" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11116:11151" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11917:11952" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="12765:12800" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="13579:13652" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="14340:14375" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="15152:15225" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="15523:15594" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="16658:16693" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="17849:17884" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="18370:18446" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="18767:18840" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="19349:19422" placeholder="select * fro..farmers..." />
           </folding>
         </state>
       </provider>
@@ -335,28 +338,29 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#6#96#0#PHP" expanded="true" />
-            <marker date="1437592531689" expanded="true" signature="800:835" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="1082:1118" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="4550:4585" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="5063:5098" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6370:6405" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6957:6992" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="7382:7455" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="8395:8430" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="8820:8893" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="9368:9439" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="9711:9746" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="10835:10870" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="11636:11671" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="12484:12519" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="13298:13371" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="14059:14094" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="14871:14944" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="15242:15313" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="16376:16411" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="16897:16973" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17294:17367" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17876:17949" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="1093:1128" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="1375:1411" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="4831:4866" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="5344:5379" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="6651:6686" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7238:7273" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7663:7736" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="8676:8711" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="9101:9174" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="9649:9720" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="9992:10027" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11116:11151" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11917:11952" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="12765:12800" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="13579:13652" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="14340:14375" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="15152:15225" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="15523:15594" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="16658:16693" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="17849:17884" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="18370:18446" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="18767:18840" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="19349:19422" placeholder="select * fro..farmers..." />
           </folding>
         </state>
       </provider>
@@ -375,28 +379,29 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#6#96#0#PHP" expanded="true" />
-            <marker date="1437592531689" expanded="true" signature="800:835" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="1082:1118" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="4550:4585" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="5063:5098" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6370:6405" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6957:6992" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="7382:7455" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="8395:8430" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="8820:8893" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="9368:9439" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="9711:9746" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="10835:10870" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="11636:11671" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="12484:12519" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="13298:13371" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="14059:14094" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="14871:14944" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="15242:15313" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="16376:16411" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="16897:16973" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17294:17367" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17876:17949" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="1093:1128" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="1375:1411" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="4831:4866" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="5344:5379" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="6651:6686" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7238:7273" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7663:7736" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="8676:8711" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="9101:9174" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="9649:9720" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="9992:10027" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11116:11151" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11917:11952" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="12765:12800" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="13579:13652" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="14340:14375" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="15152:15225" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="15523:15594" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="16658:16693" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="17849:17884" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="18370:18446" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="18767:18840" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="19349:19422" placeholder="select * fro..farmers..." />
           </folding>
         </state>
       </provider>
@@ -411,32 +416,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/farmbot.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41714287" vertical-offset="5913" max-vertical-offset="7395">
-          <caret line="365" column="8" selection-start-line="365" selection-start-column="8" selection-end-line="365" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.5692996" vertical-offset="7268" max-vertical-offset="7956">
+          <caret line="450" column="16" selection-start-line="450" selection-start-column="16" selection-end-line="450" selection-end-column="16" />
           <folding>
             <element signature="e#6#96#0#PHP" expanded="true" />
-            <marker date="1437592531689" expanded="true" signature="800:835" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="1082:1118" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="4550:4585" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="5063:5098" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6370:6405" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="6957:6992" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="7382:7455" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="8395:8430" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="8820:8893" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="9368:9439" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="9711:9746" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="10835:10870" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="11636:11671" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="12484:12519" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="13298:13371" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="14059:14094" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="14871:14944" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="15242:15313" placeholder="delete from ..." />
-            <marker date="1437592531689" expanded="true" signature="16376:16411" placeholder="select * fro..farms..." />
-            <marker date="1437592531689" expanded="true" signature="16897:16973" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17294:17367" placeholder="select * fro..farmers..." />
-            <marker date="1437592531689" expanded="true" signature="17876:17949" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="1093:1128" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="1375:1411" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="4831:4866" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="5344:5379" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="6651:6686" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7238:7273" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="7663:7736" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="8676:8711" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="9101:9174" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="9649:9720" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="9992:10027" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11116:11151" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="11917:11952" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="12765:12800" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="13579:13652" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="14340:14375" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="15152:15225" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="15523:15594" placeholder="delete from ..." />
+            <marker date="1437597313442" expanded="true" signature="16658:16693" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="17849:17884" placeholder="select * fro..farms..." />
+            <marker date="1437597313442" expanded="true" signature="18370:18446" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="18767:18840" placeholder="select * fro..farmers..." />
+            <marker date="1437597313442" expanded="true" signature="19349:19422" placeholder="select * fro..farmers..." />
           </folding>
         </state>
       </provider>

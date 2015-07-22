@@ -5,7 +5,12 @@
 
 function build_response($chat_id, $text) {
     $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
-            . $chat_id . '&text=' . $text;
+            . $chat_id .'&text='.$text;
+    return $returnvalue;
+}
+function build_loc_response($chat_id, $text, $location) {
+    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendLocation?chat_id='
+        . $chat_id .'&longitude='.$location['longitude']. '&latitude='.$location['latitude'];
     return $returnvalue;
 }
 function send_curl($url) {
@@ -76,7 +81,7 @@ function send_response($input_raw) {
     $verified = array(-34025370, -15987932, -39583346);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
-    /*$input_raw = '{
+    $input_raw = '{
                       "update_id": 89018516,
                       "message": {
                         "message_id": 62,
@@ -91,9 +96,9 @@ function send_response($input_raw) {
                           "title": "Bottest"
                         },
                         "date": 1435508622,
-                        "text": "/changerequest blablabla"
+                        "text": "/getfarmlocation"
                       }
-                    }';*/
+                    }';
     // let's log the raw JSON message first
     $log = new stdClass();
     $log->message_text = $input_raw;
@@ -363,8 +368,34 @@ Thank you!');
         $reply = urlencode('New Change Request from - @'.$messageobj['message']['from']['username'].'
         '.substr($messageobj['message']['text'], 14));
         send_curl(build_response( -34025370, $reply));
-        
+
     	return;
+    }
+
+    if ($request_message == '/getfarmlocation' || $request_message == '/getfarmlocation@SLEnlFarmBot') {
+
+        $db->setQuery('select * from farms where current=1');
+        $currentfarm = $db->loadAssoc();
+        if (empty($currentfarm)) {
+            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
+            send_curl(build_response($chat_id, $reply));
+            return;
+        }
+
+        $farmlocation = $currentfarm['location'];
+
+        if(strpos($farmlocation, 'indi') !== false || strpos($farmlocation, 'inde') !== false){
+                $locationobj = array('longitude' => 79.867644, 'latitude' => 6.904088);
+        }else if(strpos($farmlocation, 'dewram') !== false || strpos($farmlocation, 'devram') !== false){
+                $locationobj = array('longitude' =>  79.942516, 'latitude' =>  6.853475);
+        }else {
+                $reply = $farmlocation.' farm location is not recognized.';
+                send_curl(build_response($chat_id, $reply));
+            }
+       // $location = json_encode($locationobj);
+        send_curl(build_loc_response($chat_id, $reply,$locationobj));
+
+        return;
     }
 
     if ($request_message == '/icametofarm' || $request_message == '/icametofarm@SLEnlFarmBot') {
@@ -417,10 +448,12 @@ Thank you!');
 /addfarmer USERNAME - Adds the given username to the farm.
 /removefarmer USERNAME - Removes the given username from the farm.
 /setfarmlocation LOCATION - Sets the location for the current farm.
+/getfarmlocation - Get the location of the current farm.
 /setfarmtime DATE TIME - Sets the date and time for the current farm.(e.g. "Today 6pm")
 /deletefarm - Deletes the current farm.
 /changerequest - Suggest a change to the bot.        		
 /help - Display this help text.');
+
         send_curl(build_response($chat_id, $reply));
         return;
     }
