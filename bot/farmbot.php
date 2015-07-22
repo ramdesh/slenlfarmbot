@@ -87,11 +87,11 @@ function send_response($input_raw) {
                           "username": "CMNisal"
                         },
                         "chat": {
-                          "id": 38722085,
+                          "id":-34025370,
                           "title": "Bottest"
                         },
                         "date": 1435508622,
-                        "text": "/removemefromfarm"
+                        "text": "/changerequest blablabla"
                       }
                     }';*/
     // let's log the raw JSON message first
@@ -359,6 +359,11 @@ In the meantime, please be sure to obtain approval from the SL ENL Security Expe
 as there may be unforeseen and unfathomable dangers associated with your change request. 
 Thank you!');
     	send_curl(build_response($chat_id, $reply));
+
+        $reply = urlencode('New Change Request from - @'.$messageobj['message']['from']['username'].'
+        '.substr($messageobj['message']['text'], 14));
+        send_curl(build_response( -34025370, $reply));
+        
     	return;
     }
 
