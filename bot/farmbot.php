@@ -352,7 +352,7 @@ Thank you!');
     	return;
     }
 
-    if ($message_txt_parts[0] == '/icametofarm') {
+    if ($request_message == '/icametofarm' || $request_message == '/icametofarm@SLEnlFarmBot') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
