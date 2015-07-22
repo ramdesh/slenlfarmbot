@@ -187,6 +187,11 @@ function send_response($input_raw) {
             send_curl(build_response($chat_id, $reply));
             return;
         }
+        
+        if ($farmer_name == '@Cyan017'){
+            $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!');
+        }
+            
         $reply .= easter_eggs($farmer_name);
         $farmer = new stdClass();
         $farmer->farm_id = $currentfarm['id'];
@@ -212,12 +217,17 @@ function send_response($input_raw) {
             send_curl(build_response($chat_id, $reply));
             return;
         }
+        
+        if ($farmer_name == '@Cyan017'){
+            $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
+        }
+        
         $db->setQuery("delete from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id'])->loadResult();
         $reply .= build_farm_message();
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($request_message == '/deletefarm' || $request_message == '/delefarm@SLEnlFarmBot') {
+    if ($request_message == '/deletefarm' || $request_message == '/deletefarm@SLEnlFarmBot') {
         $db->setQuery('select * from farms where current=1');
         $currentfarm = $db->loadAssoc();
         if (empty($currentfarm)) {
