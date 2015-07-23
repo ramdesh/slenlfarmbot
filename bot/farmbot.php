@@ -96,9 +96,9 @@ function send_response($input_raw) {
                           "title": "Bottest"
                         },
                         "date": 1435508622,
-                        "text": "/getfarmlocation"
+                        "text": "/getfarmlocation rajagiriya"
                       }
-                    }'; */
+                    }';*/
     // let's log the raw JSON message first
     $log = new stdClass();
     $log->message_text = $input_raw;
@@ -387,7 +387,9 @@ Thank you!');
         if(strpos($farmlocation, 'indi') !== false || strpos($farmlocation, 'inde') !== false){
                 $locationobj = array('longitude' => 79.867644, 'latitude' => 6.904088);
         }else if(strpos($farmlocation, 'dewram') !== false || strpos($farmlocation, 'devram') !== false){
-                $locationobj = array('longitude' =>  79.942516, 'latitude' =>  6.853475);
+            $locationobj = array('longitude' =>  79.942516, 'latitude' =>  6.853475);
+        }else if(strpos($farmlocation, 'rajagiri') !== false){
+            $locationobj = array('longitude' =>  79.895746, 'latitude' =>  6.908751);
         }else {
                 $reply = $farmlocation.' farm location is not recognized.';
                 send_curl(build_response($chat_id, $reply));
