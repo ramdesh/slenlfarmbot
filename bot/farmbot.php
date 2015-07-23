@@ -5,12 +5,12 @@
 
 function build_response($chat_id, $text) {
     $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
-            . $chat_id .'&text='.$text;
+            . $chat_id . '&text=' . $text;
     return $returnvalue;
 }
-function build_loc_response($chat_id, $text, $location) {
+function build_location_response($chat_id, $text, $location) {
     $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendLocation?chat_id='
-        . $chat_id .'&longitude='.$location['longitude']. '&latitude='.$location['latitude'];
+        . $chat_id .'&longitude=' . $location['longitude'] . '&latitude='.$location['latitude'];
     return $returnvalue;
 }
 function send_curl($url) {
@@ -81,7 +81,7 @@ function send_response($input_raw) {
     $verified = array(-34025370, -15987932, -39583346);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
-    $input_raw = '{
+    /*$input_raw = '{
                       "update_id": 89018516,
                       "message": {
                         "message_id": 62,
@@ -98,7 +98,7 @@ function send_response($input_raw) {
                         "date": 1435508622,
                         "text": "/getfarmlocation"
                       }
-                    }';
+                    }'; */
     // let's log the raw JSON message first
     $log = new stdClass();
     $log->message_text = $input_raw;
@@ -393,7 +393,7 @@ Thank you!');
                 send_curl(build_response($chat_id, $reply));
             }
        // $location = json_encode($locationobj);
-        send_curl(build_loc_response($chat_id, $reply,$locationobj));
+        send_curl(build_location_response($chat_id, $reply,$locationobj));
 
         return;
     }
