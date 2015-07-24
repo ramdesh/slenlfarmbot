@@ -8,7 +8,7 @@ function build_response($chat_id, $text) {
             . $chat_id . '&text=' . $text;
     return $returnvalue;
 }
-function build_location_response($chat_id, $text, $location) {
+function build_location_response($chat_id, $location) {
     $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendLocation?chat_id='
         . $chat_id .'&longitude=' . $location['longitude'] . '&latitude='.$location['latitude'];
     return $returnvalue;
@@ -384,18 +384,18 @@ Thank you!');
 
         $farmlocation = $currentfarm['location'];
 
-        if(strpos($farmlocation, 'indi') !== false || strpos($farmlocation, 'inde') !== false){
+        if(strripos($farmlocation, 'indi') !== false || strripos($farmlocation, 'inde') !== false){
                 $locationobj = array('longitude' => 79.867644, 'latitude' => 6.904088);
-        }else if(strpos($farmlocation, 'dewram') !== false || strpos($farmlocation, 'devram') !== false){
+        }else if(strripos($farmlocation, 'dewram') !== false || strripos($farmlocation, 'devram') !== false){
             $locationobj = array('longitude' =>  79.942516, 'latitude' =>  6.853475);
-        }else if(strpos($farmlocation, 'rajagiri') !== false){
+        }else if(strripos($farmlocation, 'rajagiri') !== false){
             $locationobj = array('longitude' =>  79.895746, 'latitude' =>  6.908751);
         }else {
                 $reply = $farmlocation.' farm location is not recognized.';
                 send_curl(build_response($chat_id, $reply));
             }
        // $location = json_encode($locationobj);
-        send_curl(build_location_response($chat_id, $reply,$locationobj));
+        send_curl(build_location_response($chat_id,$locationobj));
 
         return;
     }
