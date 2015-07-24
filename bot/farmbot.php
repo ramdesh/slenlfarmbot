@@ -370,7 +370,7 @@ Thank you!');
     	
     	if (strpos($message,'please') == false) {
     		$reply = urlencode('Dear Enlightened LK member,
-Say please. I do not accommodate requests from rude bastards.    				
+Say please. I am programmed to not accommodate rude people.			
 Thank you!');
     		send_curl(build_response($chat_id, $reply));
     		return;
