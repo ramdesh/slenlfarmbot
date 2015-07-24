@@ -425,6 +425,11 @@ Thank you!');
             $farmer->farmer_name = $upgraded_farmer_name;
             $db->insertObject('farmers', $farmer);
             $reply = urlencode($farmer_name.' Upgraded '.$currentfarm['location'].' Farm.');
+            $db->setQuery("select count(*) as count from farmers where farmer_name like '%Upgraded%' and farm_id=" . $currentfarm['id']);
+            $l8count = $db->loadAssoc();
+            if($l8count['count']==8){
+                $reply .= urlencode(' And '.$currentfarm['location'].' Farm is Fully Upgraded with 8 L8 Resonators.');
+            }
             send_curl(build_response($chat_id, $reply));
             return;
         }
