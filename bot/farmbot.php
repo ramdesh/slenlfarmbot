@@ -358,6 +358,24 @@ function send_response($input_raw) {
         return;
     }
     if ($request_message == '/changerequest' || $request_message == '/changerequest@SLEnlFarmBot') {
+    	$message = strtolower(substr($messageobj['message']['text'], 14));
+    	
+    	if ($message == '' || $message == null ) {
+    		$reply = urlencode('Dear Enlightened LK member,
+Bloody say something!
+Thank you!');
+    		send_curl(build_response($chat_id, $reply));
+    		return;
+    	}
+    	
+    	if (strpos($message,'please') == false) {
+    		$reply = urlencode('Dear Enlightened LK member,
+Say please. I do not accommodate requests from rude bastards.    				
+Thank you!');
+    		send_curl(build_response($chat_id, $reply));
+    		return;
+    	} 
+    	
     	$reply = urlencode('Dear Enlightened LK member,
 Your suggestion for improvement has been received and will be processed in the distant future (although this is unlikely). 
 In the meantime, please be sure to obtain approval from the SL ENL Security Experts Incompetency Group (SESEIG™), 
