@@ -81,7 +81,7 @@ function send_response($input_raw) {
     $verified = array(-34025370, -15987932, -39583346,-29377682);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
-    $input_raw = '{
+    /*$input_raw = '{
                       "update_id": 89018516,
                       "message": {
                         "message_id": 62,
@@ -98,7 +98,7 @@ function send_response($input_raw) {
                         "date": 1435508622,
                         "text": "/getfarmlocation rajagiriya"
                       }
-                    }';
+                    }';*/
     // let's log the raw JSON message first
     $log = new stdClass();
     $log->message_text = $input_raw;
