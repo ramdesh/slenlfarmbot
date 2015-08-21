@@ -78,7 +78,7 @@ function easter_eggs($farmer_name) {
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
-    $verified = array(-34025370, -15987932, -39583346,-29377682);
+    $verified = array(-34025370, -15987932, -39583346,-29377682,-38823774);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
     /*$input_raw = '{
