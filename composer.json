@@ -1,5 +1,7 @@
 {
 "require": {
-    "ext-mysql": "*"
+    "ext-mysql": "*",
+    "ext-mbstring": "*"
+    
    }
 }
