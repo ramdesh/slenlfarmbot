@@ -100,9 +100,9 @@ function send_response($input_raw) {
                       }
                     }';*/
     // let's log the raw JSON message first
-    $log = new stdClass();
+    /* $log = new stdClass();
     $log->message_text = $input_raw;
-    $db->insertObject('message_log', $log);
+    $db->insertObject('message_log', $log);*/
     $messageobj = json_decode($input_raw, true);
     $message_txt_parts = explode(' ', $messageobj['message']['text']);
     $request_message = $message_txt_parts[0];
