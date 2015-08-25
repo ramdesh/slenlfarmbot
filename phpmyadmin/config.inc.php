@@ -26,7 +26,7 @@ $i = 0;
  */
 $i++;
 /* Authentication type */
-$cfg['Servers'][$i]['auth_type'] = 'config';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'us-cdbr-iron-east-02.cleardb.net';
 $cfg['Servers'][$i]['username'] = 'b75bc0321dfb7d';
