@@ -26,9 +26,11 @@ $i = 0;
  */
 $i++;
 /* Authentication type */
-$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][$i]['auth_type'] = 'config';
 /* Server parameters */
-$cfg['Servers'][$i]['host'] = 'localhost';
+$cfg['Servers'][$i]['host'] = 'us-cdbr-iron-east-02.cleardb.net';
+$cfg['Servers'][$i]['username'] = 'b75bc0321dfb7d';
+$cfg['Servers'][$i]['password'] = '7da05047';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
@@ -38,10 +40,10 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
  */
 
 /* User used to manipulate with storage */
-$cfg['Servers'][$i]['controlhost'] = 'us-cdbr-iron-east-02.cleardb.net';
+/*$cfg['Servers'][$i]['controlhost'] = 'us-cdbr-iron-east-02.cleardb.net';
 $cfg['Servers'][$i]['controlport'] = '';
 $cfg['Servers'][$i]['controluser'] = 'b75bc0321dfb7d';
-$cfg['Servers'][$i]['controlpass'] = '7da05047';
+$cfg['Servers'][$i]['controlpass'] = '7da05047';*/
 
 /* Storage database and tables */
 // $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
