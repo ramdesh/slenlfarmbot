@@ -83,7 +83,7 @@ function easter_eggs($farmer_name) {
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
-    $verified = array(-34025370, -15987932, -39583346, -29377682, -38823774);
+    $verified = array(-34025370, -15987932, -39583346, -29377682, -38823774,-27924249);
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
     $input_raw = '{
@@ -97,7 +97,7 @@ function send_response($input_raw) {
                           "username": "RamdeshLota"
                         },
                         "chat": {
-                          "id":-34025370,
+                          "id":-27924249,
                           "title": "Bottest"
                         },
                         "date": 1435508622,
@@ -205,10 +205,17 @@ function send_response($input_raw) {
         for($i = 0; $i < count($currentfarms); $i++) {
             $keyboard['keyboard'][$i][0] = $currentfarms[$i]['id'] . '. ' . $currentfarms[$i]['location'] . ' ' . $currentfarms[$i]['date_and_time'];
         }
-        $reply = urlencode("Which farm?");
+		$keyboard['resize_keyboard']=true;
+		$keyboard['one_time_keyboard']=true;
+		$keyboard['selective']=true;
+		
+		$farmer_name = '@' . $messageobj['message']['from']['username'];
+		
+        $reply = urlencode($farmer_name.", Which farm you need to be added?");
         send_curl(build_response_keyboard($chat_id, $reply, $message_id, json_encode($keyboard)));
         echo build_response_keyboard($chat_id, $reply, $message_id, json_encode($keyboard));
-        /*$farmer_name = '@' . $messageobj['message']['from']['username'];
+        
+		/*
         $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
         $farmeravailable = $db->loadAssoc();
         if (!empty($farmeravailable)) {
