@@ -9,8 +9,11 @@ function build_response($chat_id, $text) {
     return $returnvalue;
 }
 function build_response_keyboard($chat_id, $text, $message_id, $markup) {
+    $markup['resize_keyboard'] = true;
+    $markup['one_time_keyboard'] = true;
+    $markup['selective'] = true;
     $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
-        . $chat_id . '&text=' . $text . '&reply_to_message_id=' . $message_id . '&reply_markup=' . $markup;
+        . $chat_id . '&text=' . $text . '&reply_to_message_id=' . $message_id . '&reply_markup=' . json_encode($markup);
     return $returnvalue;
 }
 function build_location_response($chat_id, $location) {
@@ -205,15 +208,13 @@ function send_response($input_raw) {
         for($i = 0; $i < count($currentfarms); $i++) {
             $keyboard['keyboard'][$i][0] = $currentfarms[$i]['id'] . '. ' . $currentfarms[$i]['location'] . ' ' . $currentfarms[$i]['date_and_time'];
         }
-		$keyboard['resize_keyboard']=true;
-		$keyboard['one_time_keyboard']=true;
-		$keyboard['selective']=true;
+
 		
 		$farmer_name = '@' . $messageobj['message']['from']['username'];
 		
         $reply = urlencode($farmer_name.", Which farm you need to be added?");
-        send_curl(build_response_keyboard($chat_id, $reply, $message_id, json_encode($keyboard)));
-        echo build_response_keyboard($chat_id, $reply, $message_id, json_encode($keyboard));
+        send_curl(build_response_keyboard($chat_id, $reply, $message_id, $keyboard));
+        //echo build_response_keyboard($chat_id, $reply, $message_id, json_encode($keyboard));
         
 		/*
         $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
