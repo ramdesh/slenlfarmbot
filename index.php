@@ -191,8 +191,11 @@ function send_response($input_raw) {
         if (!empty($message_txt_parts[1])) {
             $location = $message_txt_parts[1];
         } else {
-            $reply .= urlencode('You might want to set a location for the farm using /setfarmlocation LOCATION_NAME.
+            $reply .= urlencode('You need to set a location for the farm. Please use command /createfarm LOCATION DATE TIME 
 ');
+	    send_curl(build_response($chat_id, $reply));
+	    return;
+        
         }
         if (!empty($message_txt_parts[2]) && !empty($message_txt_parts[3])) {
             $time = $message_txt_parts[2] . ' ' . $message_txt_parts[3];
@@ -200,6 +203,7 @@ function send_response($input_raw) {
             $reply .= urlencode('You might want to set a date and time for the farm using /setfarmtime DATE TIME.
 ');
         }
+        
         $farm = new stdClass();
         $farm->date_and_time = $time;
         $farm->location = $location;
@@ -215,6 +219,7 @@ function send_response($input_raw) {
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
         $db->insertObject('farmers', $farmer);
+        
         send_curl(build_response($chat_id, $reply));
         
         return;
