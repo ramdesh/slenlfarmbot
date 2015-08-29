@@ -2,10 +2,28 @@
 /**
  * Bot that helps set up a farming session for the Sri Lankan Ingress Enlightened.
  */
+ 
+ // Define multiple farming
+ // 1 = allow multiple farms
+ // 0 = disallow multiple farms
+ define ("MULTIFARM", 1);
+ 
+ // Define debug logging level
+ // 0 = no logging
+ // 1 = all logs
+ define ("DEBUGLVL", 0);
 
 function build_response($chat_id, $text) {
     $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
             . $chat_id . '&text=' . $text;
+    return $returnvalue;
+}
+function build_response_keyboard($chat_id, $text, $message_id, $markup) {
+    $markup['resize_keyboard'] = true;
+    $markup['one_time_keyboard'] = true;
+    $markup['selective'] = true;
+    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+        . $chat_id . '&text=' . $text . '&reply_to_message_id=' . $message_id . '&reply_markup=' . json_encode($markup);
     return $returnvalue;
 }
 function build_location_response($chat_id, $location) {
@@ -27,16 +45,16 @@ function send_curl($url) {
     // Close connection
     curl_close($ch);
 }
-function build_farm_message() {
+function build_farm_message($id) {
 	include_once ('dbAccess.php');
 	$db = dbAccess::getInstance();
-    $db->setQuery('select * from farms where current=1');
+    $db->setQuery('select * from farms where id=' . $id);
     $currentfarm = $db->loadAssoc();
 	$reply = urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
 ');
 	$reply .= urlencode('Farm creator - ' . $currentfarm['creator'] .'
 ');
-        $db->setQuery('select * from farmers where farm_id='.$currentfarm['id']);
+        $db->setQuery('select * from farmers where farm_id=' . $currentfarm['id']);
         $farmers = $db->loadAssocList();
         $i = 1;
         foreach ($farmers as $farmer) {
@@ -78,284 +96,360 @@ function easter_eggs($farmer_name) {
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
-    $verified = array(-34025370, -15987932, -39583346,-29377682,-38823774,-27924249);
+    $verified = array(-34025370, -15987932, -39583346, -29377682, -38823774, -27924249);
+    $sequence_commands = array('/farms','/farming','/addmetofarm','/removemefromfarm','/deletefarm',
+                   '/setfarmlocation','/setfarmtime', '/addfarmer','/removefarmer','/getfarmlocation', '/icametofarm' );
+    //This array is used to store the questions to be asked when a user sends a message which would require secondary processing for farm selection.
+    //[0] - Farm selection question - this is used in later processing to identify which message the bot should reply to
+    // [1] - How many segments should there be other than the request message - this is used for validation.
+    // [2] - Response to send if validation on message segments fails.
+    $selection_questions = array('/farming' => array('Which farm do you want the details of?', 0),
+                                        '/addmetofarm' => array('Which farm do you want to be added to?', 0),
+                                        '/removemefromfarm' => array('Which farm do you want to be removed from?', 0),
+                                        '/deletefarm' => array('Which farm do you want to delete?', 0),
+                                        '/setfarmlocation' => array('Which farm do you want to set the location for?', 1, 'You need to specify a location. Use /setfarmlocation LOCATION.'),
+                                        '/setfarmtime' => array('Which farm do you want to set the time for?', 2, 'You need to specify a date and time. Use /setfarmtime DATE TIME.'),
+                                        '/addfarmer' => array('Which farm do you want to add to?', 1, 'You need to specify who you need to add. Use /addfarmer FARMER_NAME.'),
+                                        '/removefarmer' => array('Which farm do you want to remove from?', 1, 'You need to specify who you need to remove. Use /removefarmer FARMER_NAME.'),
+                                        '/getfarmlocation' => array('Which farm do you want the location of?',0),
+                                        '/icametofarm' => array('Which farm did you come to?',0));
+
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
     /*$input_raw = '{
-                      "update_id": 89018516,
-                      "message": {
-                        "message_id": 62,
-                        "from": {
-                          "id": 63477295,
-                          "first_name": "Ramindu \"RamdeshLota\"",
-                          "last_name": "Deshapriya",
-                          "username": "CMNisal"
-                        },
-                        "chat": {
-                          "id":-34025370,
-                          "title": "Bottest"
-                        },
-                        "date": 1435508622,
-                        "text": "/getfarmlocation rajagiriya"
-                      }
-                    }';*/
+                  "update_id": 89023643,
+                  "message": {
+                    "message_id": 9370,
+                    "from": {
+                      "id": 63477295,
+                      "first_name": "Ramindu \"RamdeshLota\"",
+                      "last_name": "Deshapriya",
+                      "username": "RamdeshLota"
+                    },
+                    "chat": {
+                      "id": -27924249,
+                      "title": "Bot Devs & BAs"
+                    },
+                    "date": 1440704429,
+                    "reply_to_message": {
+                      "message_id": 9369,
+                      "from": {
+                        "id": 112493740,
+                        "first_name": "SL ENL Farm Bot",
+                        "username": "SLEnlFarmBot"
+                      },
+                      "chat": {
+                        "id": -27924249,
+                        "title": "Bot Devs & BAs"
+                      },
+                      "date": 1440704423,
+                      "text": "@RamdeshLota, Which farm do you want to add to? |@Cyan017"
+                    },
+                    "text": "67. Indi 7pm"
+                  }
+
+                }';*/
     // let's log the raw JSON message first
-    /* $log = new stdClass();
-    $log->message_text = $input_raw;
-    $db->insertObject('message_log', $log);*/
+
+    if(DEBUGLVL){
+        $log = new stdClass();
+        $log->message_text = $input_raw;
+        $db->insertObject('message_log', $log);
+    }
     $messageobj = json_decode($input_raw, true);
     $message_txt_parts = explode(' ', $messageobj['message']['text']);
+    $complete_message = $messageobj['message']['text'];
     $request_message = $message_txt_parts[0];
+    $request_message = explode('@', $request_message)[0];
     $chat_id = $messageobj['message']['chat']['id'];
+    $message_id = $messageobj['message']['message_id'];
+    $farmer_name = '@' . $messageobj['message']['from']['username'];
     $reply = '';
     //check for swear words
     foreach ($swears as $swear) {
-        if (strpos($messageobj['message']['text'], $swear) !== false) {
-            $reply = urlencode('යකෝ මේක හදල තියෙන්නෙ ගොන් ආතල් ගන්න නෙවේ. ගොන් ආතල් ගන්න ඕන නම් මෑඩ් හව්ස් එකට පලයන්.');
-            send_curl(build_response($chat_id, $reply));
-            return;
+        if (strpos($complete_message, $swear) !== false) {
+                $reply = urlencode('යකෝ මේක හදල තියෙන්නෙ ගොන් ආතල් ගන්න නෙවේ. ගොන් ආතල් ගන්න ඕන නම් මෑඩ් හව්ස් එකට පලයන්.');
+                send_curl(build_response($chat_id, $reply));
+                return;
         }
     }
+
     if (!in_array($chat_id, $verified)) {
         $reply = urlencode('As requested by the SL ENL Security Experts Incompetency Group (SESEIG™), this bot can no longer be used in unverified groups. If you need to have a particular group added to the verified list, talk to @RamdeshLota.');
         send_curl(build_response($chat_id, $reply));
         return;
     }
-    if ($request_message == '/farming' || $request_message == '/farming@SLEnlFarmBot') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
+
+    if (in_array($request_message, $sequence_commands)) {
+        // validate if the message is ready for multifarms
+        if(count($message_txt_parts) - 1 < $selection_questions[$request_message][1]){
+            $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][2]);
+            send_curl(build_response($chat_id, $reply));
+            return;
+        }
+
+        // This is an initial message in the chain, generate the farm list and send
+        $db->setQuery('select id from farms where current=1 and farm_group=' . $chat_id);
+        $currentfarms = $db->loadAssocList();
+        if (empty($currentfarms)) {
             $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
             send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
 
-    }
-    if ($request_message == '/createfarm') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (!empty($currentfarm)) {
-            $reply = urlencode('There is already an active farming session set up. Send /deletefarm to delete that session and create a new one using /createfarm after that. ');
-            send_curl(build_response($chat_id, $reply));
             return;
         }
+        $farmer_name = '@' . $messageobj['message']['from']['username'];
+        $keyboard = array('keyboard' => array());
+        for($i = 0; $i < count($currentfarms); $i++) {
+            $keyboard['keyboard'][$i][0] = $currentfarms[$i]['id'] . '. ' . $currentfarms[$i]['location'] . ' ' . $currentfarms[$i]['date_and_time'];
+        }
+        if ($request_message == '/setfarmtime') {
+            $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][0] . ' |' . $message_txt_parts[1] . ' ' . $message_txt_parts[2]);
+        } else if ($request_message == '/setfarmlocation' || $request_message == '/addfarmer' || $request_message == '/removefarmer') {
+            $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][0] . ' |' . $message_txt_parts[1]);
+        } else {
+            $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][0]);
+        }
+        send_curl(build_response_keyboard($chat_id, $reply, $message_id, $keyboard));
+        return;
+    }
+
+    if ($request_message == '/createfarm') {
         $time = $location = '';
         $farmer_name = '@' . $messageobj['message']['from']['username'];
         $reply .= easter_eggs($farmer_name);
+        
         if (!empty($message_txt_parts[1])) {
             $location = $message_txt_parts[1];
         } else {
-            $reply .= urlencode('You might want to set a location for the farm using /setfarmlocation LOCATION_NAME.
+            $reply = urlencode('You cannot set up a farm without specifying a location. Use /createfarm LOCATION DATE TIME.
 ');
+            send_curl(build_response($chat_id, $reply));
+            return;
         }
         if (!empty($message_txt_parts[2]) && !empty($message_txt_parts[3])) {
             $time = $message_txt_parts[2] . ' ' . $message_txt_parts[3];
         } else {
-            $reply .= urlencode('You might want to set a date and time for the farm using /setfarmtime DATE TIME.
+            $reply = urlencode('You cannot set up a farm without specifying a date and time for it. Use /createfarm LOCATION DATE TIME.
 ');
+            send_curl(build_response($chat_id, $reply));
+            return;
         }
+        
         $farm = new stdClass();
         $farm->date_and_time = $time;
         $farm->location = $location;
         $farm->creator = $farmer_name;
+        $farm->farm_group = $chat_id;
         $farm->current = 1;
         $db->insertObject('farms', $farm);
-        $db->setQuery('select * from farms where current=1');
+        $db->setQuery('select * from farms where current=1 order by id desc limit 1');
         $currentfarm = $db->loadAssoc();
-        $reply .= urlencode('Current farm - ' . $currentfarm['location'] . ' ' . $currentfarm['date_and_time'] . '
+        $reply .= urlencode($farmer_name . ' created a farm - ' . $currentfarm['location'] . '_' . $currentfarm['date_and_time'] . '
 1. ' . $farmer_name);
         $farmer = new stdClass();
         $farmer->farm_id = $currentfarm['id'];
         $farmer->farmer_name = $farmer_name;
         $db->insertObject('farmers', $farmer);
         send_curl(build_response($chat_id, $reply));
+        
         return;
+    }
+    if (array_key_exists('reply_to_message', $messageobj['message'])) {
+        // This is a secondary message on the chain - process it
+        $secondary_parts = explode('.', $complete_message);
+        $selected_farm_id = $secondary_parts[0];
+        $reply_to_message = $messageobj['message']['reply_to_message']['text'];
+        $db->setQuery('select * from farms where id=' . $selected_farm_id);
+        $currentfarm = $db->loadAssoc();
+        if (strpos($reply_to_message, 'details') !== false) {
+            // Earlier message was /farming
+            $reply .= build_farm_message($currentfarm['id']);
+            send_curl(build_response($chat_id, $reply));
 
+            return;
+        }
+        if (strpos($reply_to_message, 'added') !== false) {
+            $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
+            $farmeravailable = $db->loadAssoc();
+            if (!empty($farmeravailable)) {
+                $reply = urlencode('You have already been added to this farm, ' . $farmer_name);
+                send_curl(build_response($chat_id, $reply));
 
-    }
-    if ($request_message == '/addmetofarm' || $request_message == '/addmetofarm@SLEnlFarmBot') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
+                return;
+            }
+
+            if ($farmer_name == '@Cyan017'){
+                $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!');
+            }
+
+            $reply .= easter_eggs($farmer_name);
+            $farmer = new stdClass();
+            $farmer->farm_id = $currentfarm['id'];
+            $farmer->farmer_name = $farmer_name;
+            $db->insertObject('farmers', $farmer);
+            $reply .= build_farm_message($currentfarm['id']);
             send_curl(build_response($chat_id, $reply));
             return;
         }
-        $farmer_name = '@' . $messageobj['message']['from']['username'];
-        $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
-        $farmeravailable = $db->loadAssoc();
-        if (!empty($farmeravailable)) {
-            $reply = urlencode('You have already been added to this farm, ' . $farmer_name);
+        if (strpos($reply_to_message, 'removed') !== false) {
+            $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
+            $farmeravailable = $db->loadAssoc();
+            if (empty($farmeravailable)) {
+                $reply = urlencode('You were not in this farm anyway, ' . $farmer_name);
+                send_curl(build_response($chat_id, $reply));
+
+                return;
+            }
+
+            if ($farmer_name == '@Cyan017'){
+                $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
+            }
+
+            $db->setQuery("delete from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id'])->loadResult();
+            $reply .= build_farm_message($currentfarm['id']);
             send_curl(build_response($chat_id, $reply));
+
             return;
         }
-        
-        if ($farmer_name == '@Cyan017'){
-            $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!');
-        }
-            
-        $reply .= easter_eggs($farmer_name);
-        $farmer = new stdClass();
-        $farmer->farm_id = $currentfarm['id'];
-        $farmer->farmer_name = $farmer_name;
-        $db->insertObject('farmers', $farmer);
-        $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
-    }
-    if ($request_message == '/removemefromfarm' || $request_message == '/removemefromfarm@SLEnlFarmBot') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
+        if (strpos($reply_to_message, 'delete') !== false) {
+            $deleter_name = '@' . $messageobj['message']['from']['username'];
+            if (($deleter_name != $currentfarm['creator'])
+                && ($deleter_name != '@RamdeshLota') && ($deleter_name != '@CMNisal')) {
+                $reply = urlencode($deleter_name . ', you are not my Creator or my Uncle, nor are you my Father. You cannot delete me.');
+                send_curl(build_response($chat_id, $reply));
+
+                return;
+            }
+            $farm = new stdClass();
+            $farm->id = $currentfarm['id'];
+            $farm->current = 0;
+            $db->updateObject('farms', $farm, 'id');
+            $reply = urlencode('Deleted current farm.');
             send_curl(build_response($chat_id, $reply));
+
             return;
         }
-        $farmer_name = '@' . $messageobj['message']['from']['username'];
-        $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
-        $farmeravailable = $db->loadAssoc();
-        if (empty($farmeravailable)) {
-            $reply = urlencode('You were not in this farm anyway, ' . $farmer_name);
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        
-        if ($farmer_name == '@Cyan017'){
-            $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
-        }
-        
-        $db->setQuery("delete from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id'])->loadResult();
-        $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
-    }
-    if ($request_message == '/deletefarm' || $request_message == '/deletefarm@SLEnlFarmBot') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up to delete. Use /createfarm LOCATION DATE TIME to set up a new farm.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $deleter_name = '@' . $messageobj['message']['from']['username'];
-        if (($deleter_name != $currentfarm['creator'])
-            && ($deleter_name != '@RamdeshLota') && ($deleter_name != '@CMNisal')) {
-            $reply = urlencode($deleter_name . ', you are not my Creator or my Uncle, nor are you my Father. You cannot delete me.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $farm = new stdClass();
-        $farm->id = $currentfarm['id'];
-        $farm->current = 0;
-        $db->updateObject('farms', $farm, 'id');
-        $reply = urlencode('Deleted current farm.');
-        send_curl(build_response($chat_id, $reply));
-        return;
-    }
-    if ($request_message == '/setfarmlocation') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up to set location. Use /createfarm LOCATION DATE TIME to set up a new farm.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $location = $message_txt_parts[1];
-        $farm = new stdClass();
-        $farm->id = $currentfarm['id'];
-        $farm->location = $location;
-        $db->updateObject('farms', $farm, 'id');
-        $reply .= urlencode('Set farm location to '. $location .'
+        if (strpos($reply_to_message, 'location for') !== false) {
+            $location = explode('|', $reply_to_message)[1];
+            $farm = new stdClass();
+            $farm->id = $currentfarm['id'];
+            $farm->location = $location;
+            $db->updateObject('farms', $farm, 'id');
+            $reply .= urlencode('Set farm location to '. $location .'
 ');
 
-        $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
-    }
-    if ($request_message == '/setfarmtime') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up to set time. Use /createfarm LOCATION DATE TIME to set up a new farm.');
+            $reply .= build_farm_message($currentfarm['id']);
             send_curl(build_response($chat_id, $reply));
+
             return;
         }
-        $date_and_time = $message_txt_parts[1] . ' ' . $message_txt_parts[2];
-        $farm = new stdClass();
-        $farm->id = $currentfarm['id'];
-        $farm->date_and_time = $date_and_time;
-        $db->updateObject('farms', $farm, 'id');
-        $reply .= urlencode('Set farm date and time to '. $date_and_time .'
+        if (strpos($reply_to_message, 'time') !== false) {
+            $date_and_time = explode('|', $reply_to_message)[1];
+            $farm = new stdClass();
+            $farm->id = $currentfarm['id'];
+            $farm->date_and_time = $date_and_time;
+            $db->updateObject('farms', $farm, 'id');
+            $reply .= urlencode('Set farm date and time to '. $date_and_time .'
 ');
-       $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
-    }
-    if ($request_message == '/addfarmer') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
+            $reply .= build_farm_message($currentfarm['id']);
             send_curl(build_response($chat_id, $reply));
+
             return;
         }
-        $farmer_name = $message_txt_parts[1];
-        if (empty($farmer_name)) {
-            $reply = urlencode('You have not specified a username to add to the farm. Use /addfarmer USERNAME to add a user.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        if ($farmer_name == '@Cyan017'){
-            $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!
+        if (strpos($reply_to_message, 'add to') !== false) {
+            $farmer_name = explode('|', $reply_to_message)[1];
+            if ($farmer_name == '@Cyan017'){
+                $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!
 ');
-        }
-        $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
-        $farmeravailable = $db->loadAssoc();
-        if (!empty($farmeravailable)) {
-            $reply = urlencode($farmer_name . ' has already been added to this farm.');
+            }
+            $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
+            $farmeravailable = $db->loadAssoc();
+            if (!empty($farmeravailable)) {
+                $reply = urlencode($farmer_name . ' has already been added to this farm.');
+                send_curl(build_response($chat_id, $reply));
+
+                return;
+            }
+            $reply .= easter_eggs($farmer_name);
+            $farmer = new stdClass();
+            $farmer->farm_id = $currentfarm['id'];
+            $farmer->farmer_name = $farmer_name;
+            $db->insertObject('farmers', $farmer);
+            $reply .= build_farm_message($currentfarm['id']);
             send_curl(build_response($chat_id, $reply));
+
             return;
         }
-        $reply .= easter_eggs($farmer_name);
-        $farmer = new stdClass();
-        $farmer->farm_id = $currentfarm['id'];
-        $farmer->farmer_name = $farmer_name;
-        $db->insertObject('farmers', $farmer);
-        $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
-    }
-    if ($request_message == '/removefarmer') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
+        if (strpos($reply_to_message, 'remove from') !== false) {
+            $farmer_name = explode('|', $reply_to_message)[1];
+            if ($farmer_name == '@Cyan017'){
+                $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
+            }
+            $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
+            $farmeravailable = $db->loadAssoc();
+            if (empty($farmeravailable)) {
+                $reply = urlencode($farmer_name . ' is not on this farm anyway.');
+                send_curl(build_response($chat_id, $reply));
+
+                return;
+            }
+            $db->setQuery("delete from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id'])->loadResult();
+            $reply .= build_farm_message($currentfarm['id']);
             send_curl(build_response($chat_id, $reply));
+
             return;
         }
-        $farmer_name = $message_txt_parts[1];
-        if (empty($farmer_name)) {
-            $reply = urlencode('You have not specified a username to remove from the farm. Use /removefarmer USERNAME to remove a user.');
-            send_curl(build_response($chat_id, $reply));
+        if (strpos($reply_to_message, 'location of') !== false) {
+            $farmlocation = $currentfarm['location'];
+
+            if(strripos($farmlocation, 'indi') !== false || strripos($farmlocation, 'inde') !== false){
+                $locationobj = array('longitude' => 79.867644, 'latitude' => 6.904088);
+            }else if(strripos($farmlocation, 'dewram') !== false || strripos($farmlocation, 'devram') !== false){
+                $locationobj = array('longitude' =>  79.942516, 'latitude' =>  6.853475);
+            }else if(strripos($farmlocation, 'rajagiri') !== false){
+                $locationobj = array('longitude' =>  79.895746, 'latitude' =>  6.908751);
+            }else {
+                $reply = $farmlocation.' farm location is not recognized.';
+                send_curl(build_response($chat_id, $reply));
+            }
+            // $location = json_encode($locationobj);
+            send_curl(build_location_response($chat_id,$locationobj));
+
             return;
         }
-        if ($farmer_name == '@Cyan017'){
-            $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
-        }
-        $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
-        $farmeravailable = $db->loadAssoc();
-        if (empty($farmeravailable)) {
-            $reply = urlencode($farmer_name . ' is not on this farm anyway.');
+        if (strpos($reply_to_message, 'come') !== false) {
+            $upgraded_farmer_name = '@' . $messageobj['message']['from']['username'].' (Upgraded)';
+            $db->setQuery("select * from farmers where farmer_name='$upgraded_farmer_name' and farm_id=" . $currentfarm['id']);
+            $upgradedfarmeravailable = $db->loadAssoc();
+            if (!empty($upgradedfarmeravailable)) {
+                $reply = urlencode('You have already Upgraded this farm,'.$farmer_name);
+                send_curl(build_response($chat_id, $reply));
+
+                return;
+            }
+            $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
+            $farmeravailable = $db->loadAssoc();
+            if (empty($farmeravailable)){
+                $farmer = new stdClass();
+                $farmer->farm_id = $currentfarm['id'];
+                $farmer->farmer_name = $upgraded_farmer_name;
+                $db->insertObject('farmers', $farmer);
+                $reply = urlencode($farmer_name.' Upgraded '.$currentfarm['location'].' Farm.');
+                send_curl(build_response($chat_id, $reply));
+
+                return;
+            }
+            $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
+            $currentfarmer = $db->loadAssoc();
+            $farmer = new stdClass();
+            $farmer->id = $currentfarmer['id'];
+            $farmer->farm_id = $currentfarm['id'];
+            $farmer->farmer_name = $upgraded_farmer_name;
+            $db->updateObject('farmers',$farmer,'id');
+            //$db->insertObject('farmers', $farmer);
+            $reply = urlencode($farmer_name.' Upgraded '.$currentfarm['location'].' Farm.');
             send_curl(build_response($chat_id, $reply));
-            return;
         }
-        $db->setQuery("delete from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id'])->loadResult();
-        $reply .= build_farm_message();
-        send_curl(build_response($chat_id, $reply));
-        return;
     }
     if ($request_message == '/changerequest' || $request_message == '/changerequest@SLEnlFarmBot') {
     	$message = strtolower(substr($messageobj['message']['text'], 14));
@@ -365,6 +459,7 @@ function send_response($input_raw) {
 Bloody say something!
 Thank you!');
     		send_curl(build_response($chat_id, $reply));
+            
     		return;
     	}
     	
@@ -373,6 +468,7 @@ Thank you!');
 Say please. I am programmed to not accommodate rude people.			
 Thank you!');
     		send_curl(build_response($chat_id, $reply));
+            
     		return;
     	} 
     	
@@ -382,86 +478,14 @@ In the meantime, please be sure to obtain approval from the SL ENL Security Expe
 as there may be unforeseen and unfathomable dangers associated with your change request. 
 Thank you!');
     	send_curl(build_response($chat_id, $reply));
+        
 
         $reply = urlencode('New Change Request from - @'.$messageobj['message']['from']['username'].'
         '.substr($messageobj['message']['text'], 14));
         send_curl(build_response( -34025370, $reply));
+        
 
     	return;
-    }
-
-    if ($request_message == '/getfarmlocation' || $request_message == '/getfarmlocation@SLEnlFarmBot') {
-
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-
-        $farmlocation = $currentfarm['location'];
-
-        if(strripos($farmlocation, 'indi') !== false || strripos($farmlocation, 'inde') !== false){
-                $locationobj = array('longitude' => 79.867644, 'latitude' => 6.904088);
-        }else if(strripos($farmlocation, 'dewram') !== false || strripos($farmlocation, 'devram') !== false){
-            $locationobj = array('longitude' =>  79.942516, 'latitude' =>  6.853475);
-        }else if(strripos($farmlocation, 'rajagiri') !== false){
-            $locationobj = array('longitude' =>  79.895746, 'latitude' =>  6.908751);
-        }else {
-                $reply = $farmlocation.' farm location is not recognized.';
-                send_curl(build_response($chat_id, $reply));
-            }
-       // $location = json_encode($locationobj);
-        send_curl(build_location_response($chat_id,$locationobj));
-
-        return;
-    }
-
-    if ($request_message == '/icametofarm' || $request_message == '/icametofarm@SLEnlFarmBot') {
-        $db->setQuery('select * from farms where current=1');
-        $currentfarm = $db->loadAssoc();
-        if (empty($currentfarm)) {
-            $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $farmer_name = '@' . $messageobj['message']['from']['username'];
-        $upgraded_farmer_name = '@' . $messageobj['message']['from']['username'].' (Upgraded)';
-        $db->setQuery("select * from farmers where farmer_name='$upgraded_farmer_name' and farm_id=" . $currentfarm['id']);
-        $upgradedfarmeravailable = $db->loadAssoc();
-        if (!empty($upgradedfarmeravailable)) {
-            $reply = urlencode('You have already Upgraded this farm,'.$farmer_name);
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
-        $farmeravailable = $db->loadAssoc();
-        if (empty($farmeravailable)){
-            $farmer = new stdClass();
-            $farmer->farm_id = $currentfarm['id'];
-            $farmer->farmer_name = $upgraded_farmer_name;
-            $db->insertObject('farmers', $farmer);
-            $reply = urlencode($farmer_name.' Upgraded '.$currentfarm['location'].' Farm.');
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-        $db->setQuery("select * from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id']);
-        $currentfarmer = $db->loadAssoc();
-        $farmer = new stdClass();
-        $farmer->id = $currentfarmer['id'];
-        $farmer->farm_id = $currentfarm['id'];
-        $farmer->farmer_name = $upgraded_farmer_name;
-        $db->updateObject('farmers',$farmer,'id');
-        //$db->insertObject('farmers', $farmer);
-        $reply = urlencode($farmer_name.' Upgraded '.$currentfarm['location'].' Farm.');
-        send_curl(build_response($chat_id, $reply));
-        $db->setQuery("select count(*) as count from farmers where farmer_name like '%Upgraded%' and farm_id=" . $currentfarm['id']);
-            $l8count = $db->loadAssoc();
-            if($l8count['count']==8){
-                $reply .= urlencode(' And '.$currentfarm['location'].' Farm is Fully Upgraded with 8 L8 Resonators.');
-            }
-        return;
     }
 
 
@@ -480,6 +504,7 @@ Thank you!');
 /help - Display this help text.');
 
         send_curl(build_response($chat_id, $reply));
+        
         return;
     }
 }
