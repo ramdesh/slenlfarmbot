@@ -145,7 +145,7 @@ function send_response($input_raw) {
                       "date": 1440704423,
                       "text": "@RamdeshLota, Which farm do you want to add to? |@Cyan017"
                     },
-                    "text": "67. Indi 7pm"
+                    "text": "/farming"
                   }
 
                 }';*/
@@ -189,7 +189,7 @@ function send_response($input_raw) {
         }
 
         // This is an initial message in the chain, generate the farm list and send
-        $db->setQuery('select id from farms where current=1 and farm_group=' . $chat_id);
+        $db->setQuery('select * from farms where current=1 and farm_group=' . $chat_id);
         $currentfarms = $db->loadAssocList();
         if (empty($currentfarms)) {
             $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
