@@ -181,13 +181,6 @@ function send_response($input_raw) {
     }
 
     if (in_array($request_message, $sequence_commands)) {
-        // validate if the message is ready for multifarms
-        if(count($message_txt_parts) - 1 < $selection_questions[$request_message][1]){
-            $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][2]);
-            send_curl(build_response($chat_id, $reply));
-            return;
-        }
-
         // This is an initial message in the chain, generate the farm list and send
         $db->setQuery('select * from farms where current=1 and farm_group=' . $chat_id);
         $currentfarms = $db->loadAssocList();
@@ -195,6 +188,12 @@ function send_response($input_raw) {
             $reply = urlencode('There are no current farms set up. Use /createfarm LOCATION DATE TIME to set up a new farm.');
             send_curl(build_response($chat_id, $reply));
 
+            return;
+        }
+        // validate if the message is ready for multifarms
+        if(count($message_txt_parts) - 1 < $selection_questions[$request_message][1]){
+            $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][2]);
+            send_curl(build_response($chat_id, $reply));
             return;
         }
         $farmer_name = '@' . $messageobj['message']['from']['username'];
