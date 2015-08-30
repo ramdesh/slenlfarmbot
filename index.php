@@ -96,7 +96,7 @@ function easter_eggs($farmer_name) {
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
-    $sequence_commands = array('/farms','/farming','/addmetofarm','/removemefromfarm','/deletefarm',
+    $sequence_commands = array('/farming','/addmetofarm','/removemefromfarm','/deletefarm',
                    '/setfarmlocation','/setfarmtime', '/addfarmer','/removefarmer','/getfarmlocation', '/icametofarm' );
     //This array is used to store the questions to be asked when a user sends a message which would require secondary processing for farm selection.
     //[0] - Farm selection question - this is used in later processing to identify which message the bot should reply to
