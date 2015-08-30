@@ -96,8 +96,7 @@ function easter_eggs($farmer_name) {
 function send_response($input_raw) {
     include 'dbAccess.php';
     $swears = array('fuckoff', 'fuck', 'hutto', 'ponnaya', 'pakaya', 'paka', 'fuckyou', 'redda', 'motherfucker', 'pimpiya','huththa','hukahan');
-    $verified = array(-34025370, -15987932, -39583346, -29377682, -38823774, -27924249);
-    $sequence_commands = array('/farms','/farming','/addmetofarm','/removemefromfarm','/deletefarm',
+    $sequence_commands = array('/farming','/addmetofarm','/removemefromfarm','/deletefarm',
                    '/setfarmlocation','/setfarmtime', '/addfarmer','/removefarmer','/getfarmlocation', '/icametofarm' );
     //This array is used to store the questions to be asked when a user sends a message which would require secondary processing for farm selection.
     //[0] - Farm selection question - this is used in later processing to identify which message the bot should reply to
@@ -172,12 +171,6 @@ function send_response($input_raw) {
                 send_curl(build_response($chat_id, $reply));
                 return;
         }
-    }
-
-    if (!in_array($chat_id, $verified)) {
-        $reply = urlencode('As requested by the SL ENL Security Experts Incompetency Group (SESEIG™), this bot can no longer be used in unverified groups. If you need to have a particular group added to the verified list, talk to @RamdeshLota.');
-        send_curl(build_response($chat_id, $reply));
-        return;
     }
 
     if (in_array($request_message, $sequence_commands)) {
