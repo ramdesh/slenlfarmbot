@@ -142,9 +142,9 @@ function send_response($input_raw) {
                         "title": "Bot Devs & BAs"
                       },
                       "date": 1440704423,
-                      "text": "@RamdeshLota, Which farm do you want to add to? |@Cyan017"
+                      "text": "@CMNisal, Which farm do you want to delete?"
                     },
-                    "text": "/farming"
+                    "text": "412. TEST 23 4pm"
                   }
 
                 }';*/
@@ -316,7 +316,7 @@ function send_response($input_raw) {
             $farm->id = $currentfarm['id'];
             $farm->current = 0;
             $db->updateObject('farms', $farm, 'id');
-            $reply = urlencode('Deleted current farm.');
+            $reply = urlencode('Deleted '.$currentfarm['location'].' farm.');
             send_curl(build_response($chat_id, $reply));
 
             return;
