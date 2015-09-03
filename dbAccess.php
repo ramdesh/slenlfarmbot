@@ -9,10 +9,10 @@
 
 class dbAccess {
 	protected static $dParams = array(
-						'host' 		=> 'us-cdbr-iron-east-02.cleardb.net',
-						'user' 		=> 'b75bc0321dfb7d',
-						'password' 	=> '7da05047',
-						'database'	=> 'heroku_7337496da953322'
+						'host' 		=> 'localhost',
+						'user' 		=> 'rdeshapr_ramindu',
+						'password' 	=> '181mihiri',
+						'database'	=> 'rdeshapr_slenlfarmbot'
 					);
 
 	

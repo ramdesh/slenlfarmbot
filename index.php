@@ -159,7 +159,7 @@ function send_response($input_raw) {
     $message_txt_parts = explode(' ', $messageobj['message']['text']);
     $complete_message = $messageobj['message']['text'];
     $request_message = $message_txt_parts[0];
-    $request_message = explode('@', $request_message)[0];
+    $request_message = explode('@', $request_message); $request_message = $request_message[0];
     $chat_id = $messageobj['message']['chat']['id'];
     $message_id = $messageobj['message']['message_id'];
     $farmer_name = '@' . $messageobj['message']['from']['username'];
@@ -322,7 +322,7 @@ function send_response($input_raw) {
             return;
         }
         if (strpos($reply_to_message, 'location for') !== false) {
-            $location = explode('|', $reply_to_message)[1];
+            $location = explode('|', $reply_to_message); $location = $location[1];
             $farm = new stdClass();
             $farm->id = $currentfarm['id'];
             $farm->location = $location;
@@ -336,7 +336,7 @@ function send_response($input_raw) {
             return;
         }
         if (strpos($reply_to_message, 'time') !== false) {
-            $date_and_time = explode('|', $reply_to_message)[1];
+            $date_and_time = explode('|', $reply_to_message); $date_and_time = $date_and_time[1];
             $farm = new stdClass();
             $farm->id = $currentfarm['id'];
             $farm->date_and_time = $date_and_time;
@@ -349,7 +349,7 @@ function send_response($input_raw) {
             return;
         }
         if (strpos($reply_to_message, 'add to') !== false) {
-            $farmer_name = explode('|', $reply_to_message)[1];
+            $farmer_name = explode('|', $reply_to_message); $farmer_name = $farmer_name[1];
             if ($farmer_name == '@Cyan017'){
                 $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!
 ');
@@ -373,7 +373,7 @@ function send_response($input_raw) {
             return;
         }
         if (strpos($reply_to_message, 'remove from') !== false) {
-            $farmer_name = explode('|', $reply_to_message)[1];
+            $farmer_name = explode('|', $reply_to_message); $farmer_name = $farmer_name[1];
             if ($farmer_name == '@Cyan017'){
                 $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
             }
