@@ -2,7 +2,7 @@
 $input = file_get_contents('php://input');
 $ch = curl_init();
 
-curl_setopt($ch, CURLOPT_URL,            "http://rdeshapriya.com/slenlfarmbot/farmbot.php" );
+curl_setopt($ch, CURLOPT_URL,            "http://rdeshapriya.com/slenlfarmbot/index.php" );
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt($ch, CURLOPT_POST,           1 );
 curl_setopt($ch, CURLOPT_POSTFIELDS,     $input ); 
