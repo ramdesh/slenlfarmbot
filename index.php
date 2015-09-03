@@ -123,7 +123,7 @@ function send_response($input_raw) {
                       "id": 63477295,
                       "first_name": "Ramindu \"RamdeshLota\"",
                       "last_name": "Deshapriya",
-                      "username": "RamdeshLota"
+                      "username": "CMNisal"
                     },
                     "chat": {
                       "id": -27924249,
@@ -142,9 +142,9 @@ function send_response($input_raw) {
                         "title": "Bot Devs & BAs"
                       },
                       "date": 1440704423,
-                      "text": "@CMNisal, Which farm do you want to delete?"
+                      "text": "@CMNisal, Which farm do you want the details of?"
                     },
-                    "text": "412. TEST 23 4pm"
+                    "text": "Cancel"
                   }
 
                 }';*/
@@ -172,6 +172,12 @@ function send_response($input_raw) {
                 return;
         }
     }
+	if ($request_message == 'Cancel') {	
+	$markup['hide_keyboard'] = true;
+	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+        . $chat_id . '&text=👍&reply_markup=' . json_encode($markup));
+		return;
+	}
 
     if (in_array($request_message, $sequence_commands)) {
         // This is an initial message in the chain, generate the farm list and send
@@ -194,6 +200,7 @@ function send_response($input_raw) {
         for($i = 0; $i < count($currentfarms); $i++) {
             $keyboard['keyboard'][$i][0] = $currentfarms[$i]['id'] . '. ' . $currentfarms[$i]['location'] . ' ' . $currentfarms[$i]['date_and_time'];
         }
+			$keyboard['keyboard'][count($currentfarms)][0] = "Cancel"; 
         if ($request_message == '/setfarmtime') {
             $reply = urlencode($farmer_name.", " . $selection_questions[$request_message][0] . ' |' . $message_txt_parts[1] . ' ' . $message_txt_parts[2]);
         } else if ($request_message == '/setfarmlocation' || $request_message == '/addfarmer' || $request_message == '/removefarmer') {
@@ -498,7 +505,8 @@ Thank you!');
         send_curl(build_response($chat_id, $reply));
         
         return;
-    }
+    }	
+	
 }
 
 send_response(file_get_contents('php://input'));
