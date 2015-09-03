@@ -474,7 +474,7 @@ Thank you!');
 
         $reply = urlencode('New Change Request from - @'.$messageobj['message']['from']['username'].'
         '.substr($messageobj['message']['text'], 14));
-        send_curl(build_response( -34025370, $reply));
+        send_curl(build_response(-27924249, $reply));
         
 
     	return;
