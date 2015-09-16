@@ -144,7 +144,7 @@ function send_response($input_raw) {
                       "date": 1440704423,
                       "text": "@CMNisal, Which farm do you want the details of?"
                     },
-                    "text": "Cancel"
+                    "text": "/activefarms"
                   }
 
                 }';*/
@@ -176,6 +176,19 @@ function send_response($input_raw) {
 	$markup['hide_keyboard'] = true;
 	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
         . $chat_id . '&text=👍&reply_markup=' . json_encode($markup));
+		return;
+	}
+	if ($request_message == '/activefarms') {	
+		$db->setQuery('select * from farms where current = 1 ');
+        $farms = $db->loadAssocList();
+		$reply = urlencode('Active Farms
+');
+        foreach ($farms as $farm) {
+            $reply .= urlencode($farm['id'] . '. ' . $farm['location'] . ' ' . $farm['date_and_time'] . '  by ' . $farm['creator']. '
+');
+	}
+	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+        . $chat_id . '&text='.$reply);
 		return;
 	}
 
@@ -479,8 +492,8 @@ Thank you!');
     	send_curl(build_response($chat_id, $reply));
         
 
-        $reply = urlencode('New Change Request from - @'.$messageobj['message']['from']['username'].'
-        '.substr($messageobj['message']['text'], 14));
+        $reply = urlencode('New #ChangeRequest from - @'.$messageobj['message']['from']['username'].'
+'.substr($messageobj['message']['text'], 14));
         send_curl(build_response(-27924249, $reply));
         
 
