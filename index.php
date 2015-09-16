@@ -178,7 +178,7 @@ function send_response($input_raw) {
         . $chat_id . '&text=👍&reply_markup=' . json_encode($markup));
 		return;
 	}
-	if ($request_message == '/activefarms') {	
+	if ($request_message == '/activefarms' && $chat_id =='-27924249') {	
 		$db->setQuery('select * from farms where current = 1 ');
         $farms = $db->loadAssocList();
 		$reply = urlencode('Active Farms
