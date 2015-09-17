@@ -120,9 +120,9 @@ function send_response($input_raw) {
                   "message": {
                     "message_id": 9370,
                     "from": {
-                      "id": 63477295,
-                      "first_name": "Ramindu \"RamdeshLota\"",
-                      "last_name": "Deshapriya",
+                      "id": 38722085,
+                      "first_name": "Nisal",
+                      "last_name": "Chandrasekara [LK]",
                       "username": "CMNisal"
                     },
                     "chat": {
@@ -161,6 +161,7 @@ function send_response($input_raw) {
     $request_message = $message_txt_parts[0];
     $request_message = explode('@', $request_message); $request_message = $request_message[0];
     $chat_id = $messageobj['message']['chat']['id'];
+	$user_id = $messageobj['message']['from']['id'];
     $message_id = $messageobj['message']['message_id'];
     $farmer_name = '@' . $messageobj['message']['from']['username'];
     $reply = '';
@@ -172,6 +173,12 @@ function send_response($input_raw) {
                 return;
         }
     }
+	if ($chat_id == $user_id) {	
+	$reply = urlencode('This is not a Group Please add me to a Group to set up your farming session.
+https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
+	send_curl(build_response($chat_id, $reply));
+		return;
+	}
 	if ($request_message == 'Cancel') {	
 	$markup['hide_keyboard'] = true;
 	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
@@ -187,8 +194,7 @@ function send_response($input_raw) {
             $reply .= urlencode($farm['id'] . '. ' . $farm['location'] . ' ' . $farm['date_and_time'] . '  by ' . $farm['creator']. '
 ');
 	}
-	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
-        . $chat_id . '&text='.$reply);
+	send_curl(build_response($chat_id, $reply));
 		return;
 	}
 
