@@ -115,18 +115,18 @@ function send_response($input_raw) {
 
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
-    $input_raw = '{
+    /*$input_raw = '{
                   "update_id": 89023643,
                   "message": {
                     "message_id": 9370,
                     "from": {
                       "id": 38722085,
-                      "first_name": "Ramindu \"RamdeshLota\"",
-                      "last_name": "Deshapriya",
+                      "first_name": "Nisal",
+                      "last_name": "Chandrasekara [LK]",
                       "username": "CMNisal"
                     },
                     "chat": {
-                      "id": 38722085,
+                      "id": -27924249,
                       "title": "Bot Devs & BAs"
                     },
                     "date": 1440704429,
@@ -147,7 +147,7 @@ function send_response($input_raw) {
                     "text": "/activefarms"
                   }
 
-                }';
+                }';*/
     // let's log the raw JSON message first
 
     if(DEBUGLVL){
