@@ -120,13 +120,13 @@ function send_response($input_raw) {
                   "message": {
                     "message_id": 9370,
                     "from": {
-                      "id": 38722085,
+                      "id": 387220855,
                       "first_name": "Nisal",
                       "last_name": "Chandrasekara [LK]",
                       "username": "CMNisal"
                     },
                     "chat": {
-                      "id": -27924249,
+                      "id":-27924249,
                       "title": "Bot Devs & BAs"
                     },
                     "date": 1440704429,
@@ -144,7 +144,7 @@ function send_response($input_raw) {
                       "date": 1440704423,
                       "text": "@CMNisal, Which farm do you want the details of?"
                     },
-                    "text": "/activefarms"
+                    "text": "/users"
                   }
 
                 }';*/
@@ -185,16 +185,22 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
         . $chat_id . '&text=👍&reply_markup=' . json_encode($markup));
 		return;
 	}
-	if ($request_message == '/activefarms' && $chat_id =='-27924249') {	
-		$db->setQuery('select * from farms where current = 1 ');
-        $farms = $db->loadAssocList();
-		$reply = urlencode('Active Farms
+	if ($chat_id =='-27924249') {	
+	
+		if ($request_message == '/activefarms' ){
+			$db->setQuery('select * from farms where current = 1 ');
+			$farms = $db->loadAssocList();
+			$reply = urlencode('Active Farms
 ');
-        foreach ($farms as $farm) {
-            $reply .= urlencode($farm['id'] . '. ' . $farm['location'] . ' ' . $farm['date_and_time'] . '  by ' . $farm['creator']. '
+			foreach ($farms as $farm) {
+				$reply .= urlencode($farm['id'] . '. ' . $farm['location'] . ' ' . $farm['date_and_time'] . '  by ' . $farm['creator']. '
 ');
+	}}  if ($request_message == '/users' ){
+		$db->setQuery("SELECT count( distinct REPLACE(farmer_name,'(Upgraded)','') ) as COUNT FROM farmers");
+		$count = $db->loadAssoc();
+		$reply = urlencode('@SLENLFarmbot users 👥 - '.$count['COUNT']);
 	}
-	send_curl(build_response($chat_id, $reply));
+		send_curl(build_response($chat_id, $reply));
 		return;
 	}
 
@@ -469,6 +475,7 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
             send_curl(build_response($chat_id, $reply));
         }
     }
+	
     if ($request_message == '/changerequest' || $request_message == '/changerequest@SLEnlFarmBot') {
     	$message = strtolower(substr($messageobj['message']['text'], 14));
     	
@@ -498,7 +505,9 @@ Thank you!');
     	send_curl(build_response($chat_id, $reply));
         
 
-        $reply = urlencode('New #ChangeRequest from - @'.$messageobj['message']['from']['username'].'
+        $reply = urlencode('New #ChangeRequest
+'.$messageobj['message']['from']['username'].'
+
 '.substr($messageobj['message']['text'], 14));
         send_curl(build_response(-27924249, $reply));
         
@@ -516,7 +525,7 @@ Thank you!');
 /removefarmer USERNAME - Removes the given username from the farm.
 /setfarmlocation LOCATION - Sets the location for the current farm.
 /getfarmlocation - Get the location of the current farm.
-/setfarmtime DATE TIME - Sets the date and time for the current farm.(e.g. "Today 6pm")
+/setfarmtime DATE TIME - Sets the date and  time for the current farm.(e.g. "Today 6pm")
 /deletefarm - Deletes the current farm.
 /changerequest - Suggest a change to the bot.        		
 /help - Display this help text.');
