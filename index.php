@@ -194,8 +194,7 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
             $reply .= urlencode($farm['id'] . '. ' . $farm['location'] . ' ' . $farm['date_and_time'] . '  by ' . $farm['creator']. '
 ');
 	}
-	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
-        . $chat_id . '&text='.$reply);
+	send_curl(build_response($chat_id, $reply));
 		return;
 	}
 
