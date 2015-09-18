@@ -194,12 +194,13 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
 ');
 			foreach ($farms as $farm) {
 				$reply .= urlencode($farm['id'] . '. ' . $farm['location'] . ' ' . $farm['date_and_time'] . '  by ' . $farm['creator']. '
-');
-	}}  if ($request_message == '/users' ){
-		$db->setQuery("SELECT count( distinct REPLACE(farmer_name,'(Upgraded)','') ) as COUNT FROM farmers");
-		$count = $db->loadAssoc();
-		$reply = urlencode('@SLENLFarmbot users 👥 - '.$count['COUNT']);
-	}
+');         }
+        }  
+        if ($request_message == '/users' ) {
+    		$db->setQuery("SELECT count( distinct REPLACE(farmer_name,'(Upgraded)','') ) as COUNT FROM farmers");
+    		$count = $db->loadAssoc();
+    		$reply = urlencode('@SLENLFarmbot users 👥 - '.$count['COUNT']);
+	    }
 		send_curl(build_response($chat_id, $reply));
 		return;
 	}
