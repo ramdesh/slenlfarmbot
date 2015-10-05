@@ -165,7 +165,7 @@ function send_response($input_raw) {
 	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-15987932') {	
 	$newcomer = $messageobj['message']['new_chat_participant']['first_name']." ".$messageobj['message']['new_chat_participant']['last_name'];
 	$reply = urlencode('Hello '.$newcomer.',	
-Welcome to SL-ENL Elite Club 💚
+Welcome to SL-ENL L8+ Group.
 
 I can help you to set up farming sessions.
 use /farming to check for current farming sessions.
