@@ -115,7 +115,7 @@ function send_response($input_raw) {
 
     $db = dbAccess::getInstance();
     //$response = send_curl('https://api.telegram.org/bot112493740:AAHBuoGVyX2_T-qOzl8LgcH-xoFyYUjIsdg/getUpdates');
-    /*$input_raw = '{
+ /*$input_raw = '{
                   "update_id": 89023643,
                   "message": {
                     "message_id": 9370,
@@ -146,8 +146,8 @@ function send_response($input_raw) {
                     },
                     "text": "/users"
                   }
-
                 }';*/
+				
     // let's log the raw JSON message first
 
     if(DEBUGLVL){
@@ -156,15 +156,31 @@ function send_response($input_raw) {
         $db->insertObject('message_log', $log);
     }
     $messageobj = json_decode($input_raw, true);
-    $message_txt_parts = explode(' ', $messageobj['message']['text']);
-    $complete_message = $messageobj['message']['text'];
-    $request_message = $message_txt_parts[0];
-    $request_message = explode('@', $request_message); $request_message = $request_message[0];
     $chat_id = $messageobj['message']['chat']['id'];
 	$user_id = $messageobj['message']['from']['id'];
     $message_id = $messageobj['message']['message_id'];
     $farmer_name = '@' . $messageobj['message']['from']['username'];
     $reply = '';
+	
+	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-15987932') {	
+	$newcomer = $messageobj['message']['new_chat_participant']['first_name']." ".$messageobj['message']['new_chat_participant']['last_name'];
+	$reply = urlencode('Hello '.$newcomer.',	
+Welcome to SL-ENL L8+ Group.
+
+I can help you to set up farming sessions.
+use /farming to check for current farming sessions.
+
+if you are an Android user please install MyTeams App and join our team
+http://myteams.website/teams/8qIqaqwnZurf');
+	send_curl(build_response($chat_id, $reply));
+		return;
+	}
+	
+	$message_txt_parts = explode(' ', $messageobj['message']['text']);
+    $complete_message = $messageobj['message']['text'];
+    $request_message = $message_txt_parts[0];
+    $request_message = explode('@', $request_message); $request_message = $request_message[0];
+    
     //check for swear words
     foreach ($swears as $swear) {
         if (strpos($complete_message, $swear) !== false) {
@@ -173,6 +189,7 @@ function send_response($input_raw) {
                 return;
         }
     }
+
 	if ($chat_id == $user_id) {	
 	$reply = urlencode('This is not a Group Please add me to a Group to set up your farming session.
 https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
@@ -520,7 +537,7 @@ Thank you!');
     }
 
 
-    if ($request_message == '/help' || $request_message == '/help@SLEnlFarmBot') {
+    if ($request_message == '/help' || $request_message == '/help@SLEnlFarmBot' || $request_message == '/start@SLEnlFarmBot') {
         $reply = urlencode('This is the SL ENL Farming Bot created by @RamdeshLota. Commands:
 /createfarm LOCATION DATE TIME - Creates a new farm.
 /addmetofarm - Adds you to the current farm.
