@@ -462,7 +462,7 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
 
             return;
         }
-        if (strpos($reply_to_message, 'come') !== false) {
+        if (strpos($reply_to_message, 'come to?') !== false) {
             $upgraded_farmer_name = '@' . $messageobj['message']['from']['username'].' (Upgraded)';
             $db->setQuery("select * from farmers where farmer_name='$upgraded_farmer_name' and farm_id=" . $currentfarm['id']);
             $upgradedfarmeravailable = $db->loadAssoc();
