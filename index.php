@@ -91,6 +91,13 @@ function easter_eggs($farmer_name) {
         $reply .= urlencode('The General is coming for farming. Sh*t just got serious.
 ');
     }
+    if ($farmer_name == '@painkillerSL') {
+        $reply .= urlencode('The Painkiller Army knows no boundaries. They know no fear. 
+');
+    if ($farmer_name == '@CMNisal') {
+        $reply .= urlencode('Nisal will be coming for farming provided he doesn\'t get in to some freak accident on the way. 
+');
+    }
     return $reply;
 }
 function send_response($input_raw) {
