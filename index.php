@@ -123,7 +123,7 @@ function send_response($input_raw) {
                       "id": 387220855,
                       "first_name": "Nisal",
                       "last_name": "Chandrasekara [LK]",
-                      "username": "CMNisal"
+                      "username": "Nisal"
                     },
                     "chat": {
                       "id":-27924249,
@@ -142,7 +142,7 @@ function send_response($input_raw) {
                         "title": "Bot Devs & BAs"
                       },
                       "date": 1440704423,
-                      "text": "@CMNisal, Which farm do you want the details of?"
+                      "text": "@Nisal, Which farm do you want the details of?"
                     },
                     "text": "/users"
                   }
@@ -359,7 +359,7 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
         if (strpos($reply_to_message, 'delete') !== false) {
             $deleter_name = '@' . $messageobj['message']['from']['username'];
             if (($deleter_name != $currentfarm['creator'])
-                && ($deleter_name != '@RamdeshLota') && ($deleter_name != '@CMNisal')) {
+                && ($deleter_name != '@RamdeshLota') && ($deleter_name != '@Nisal')) {
                 $reply = urlencode($deleter_name . ', you are not my Creator or my Uncle, nor are you my Father. You cannot delete me.');
                 send_curl(build_response($chat_id, $reply));
 
