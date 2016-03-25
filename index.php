@@ -91,6 +91,14 @@ function easter_eggs($farmer_name) {
         $reply .= urlencode('The General is coming for farming. Sh*t just got serious.
 ');
     }
+    if ($farmer_name == '@painkillerSL') {
+        $reply .= urlencode('The Painkiller Army knows no boundaries. They know no fear. 
+');
+    }
+    if ($farmer_name == '@CMNisal') {
+        $reply .= urlencode('Nisal will be coming for farming provided he doesn\'t get in to some freak accident on the way. 
+');
+    }
     return $reply;
 }
 function send_response($input_raw) {
@@ -162,7 +170,7 @@ function send_response($input_raw) {
     $farmer_name = '@' . $messageobj['message']['from']['username'];
     $reply = '';
 	
-	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-15987932') {	
+	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-15987932' & strpos($messageobj['message']['new_chat_participant']['user_name'],"bot") == false) {	
 	$newcomer = $messageobj['message']['new_chat_participant']['first_name']." ".$messageobj['message']['new_chat_participant']['last_name'];
 	$reply = urlencode('Hello '.$newcomer.',	
 Welcome to SL-ENL L8+ Group.
