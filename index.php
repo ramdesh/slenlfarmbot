@@ -170,7 +170,7 @@ function send_response($input_raw) {
     $farmer_name = '@' . $messageobj['message']['from']['username'];
     $reply = '';
 	
-	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-15987932' & strpos($messageobj['message']['new_chat_participant']['user_name'],"bot") == false) {	
+	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-1001007541919' & strpos($messageobj['message']['new_chat_participant']['user_name'],"bot") == false) {	
 	$newcomer = $messageobj['message']['new_chat_participant']['first_name']." ".$messageobj['message']['new_chat_participant']['last_name'];
 	$reply = urlencode('Hello '.$newcomer.',	
 Welcome to SL-ENL L8+ Group.
@@ -226,7 +226,7 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
         if ($request_message == '/users' ) {
     		$db->setQuery("SELECT count( distinct REPLACE(farmer_name,'(Upgraded)','') ) as COUNT FROM farmers");
     		$count = $db->loadAssoc();
-    		$reply = urlencode('@SLENLFarmbot users 👥 - '.$count['COUNT']);
+    		$reply = urlencode('@SLEnlFarmbot users 👥 - '.$count['COUNT']);
 			send_curl(build_response($chat_id, $reply));
 			return;
 		}
@@ -535,8 +535,7 @@ Thank you!');
         
 
         $reply = urlencode('New #ChangeRequest
-'.$messageobj['message']['from']['username'].'
-
+from - @'.$messageobj['message']['from']['username'].'
 '.substr($messageobj['message']['text'], 14));
         send_curl(build_response(-27924249, $reply));
         
