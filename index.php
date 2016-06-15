@@ -170,7 +170,7 @@ function send_response($input_raw) {
     $farmer_name = '@' . $messageobj['message']['from']['username'];
     $reply = '';
 	
-	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-1001007541919' & strpos($messageobj['message']['new_chat_participant']['user_name'],"bot") == false) {	
+	if (array_key_exists('new_chat_participant', $messageobj['message']) & $chat_id=='-111936746' & strpos($messageobj['message']['new_chat_participant']['user_name'],"bot") == false) {	
 	$newcomer = $messageobj['message']['new_chat_participant']['first_name']." ".$messageobj['message']['new_chat_participant']['last_name'];
 	$reply = urlencode('Hello '.$newcomer.',	
 Welcome to SL-ENL L8+ Group.
