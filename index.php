@@ -13,8 +13,10 @@
  // 1 = all logs
  define ("DEBUGLVL", 0);
 
+ define('ACCESS_TOKEN', "112493740:AAHHFH1HHM95-HgSbVoibojcA6L3AsbhfaI");
+
 function build_response($chat_id, $text) {
-    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+    $returnvalue = 'https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendMessage?chat_id='
             . $chat_id . '&text=' . $text;
     return $returnvalue;
 }
@@ -22,12 +24,12 @@ function build_response_keyboard($chat_id, $text, $message_id, $markup) {
     $markup['resize_keyboard'] = true;
     $markup['one_time_keyboard'] = true;
     $markup['selective'] = true;
-    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+    $returnvalue = 'https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendMessage?chat_id='
         . $chat_id . '&text=' . $text . '&reply_to_message_id=' . $message_id . '&reply_markup=' . json_encode($markup);
     return $returnvalue;
 }
 function build_location_response($chat_id, $location) {
-    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendLocation?chat_id='
+    $returnvalue = 'https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendLocation?chat_id='
         . $chat_id .'&longitude=' . $location['longitude'] . '&latitude='.$location['latitude'];
     return $returnvalue;
 }
@@ -206,7 +208,7 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
 	}
 	if ($request_message == 'Cancel') {	
 	$markup['hide_keyboard'] = true;
-	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+	send_curl('https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendMessage?chat_id='
         . $chat_id . '&text=👍&reply_markup=' . json_encode($markup));
 		return;
 	}
