@@ -201,7 +201,7 @@ http://myteams.website/teams/8qIqaqwnZurf');
     }
 
 	if ($chat_id == $user_id) {	
-	$reply = urlencode('This is not a Group Please add me to a Group to set up your farming session.
+	$reply = urlencode('This is not a group. Please add me to a group. to set up your farming session. Your chat id is ' . $chat_id . '
 https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
 	send_curl(build_response($chat_id, $reply));
 		return;
