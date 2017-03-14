@@ -552,7 +552,7 @@ from - @'.$messageobj['message']['from']['username'].'
 
             return;
         }
-        $db->setQuery('delete * from farms where farm_group=' . $chat_id);
+        $db->setQuery('delete from farms where farm_group=' . $chat_id);
         $db->loadResult();
         send_curl(build_response($chat_id, urlencode("The Purge has run.")));
 
