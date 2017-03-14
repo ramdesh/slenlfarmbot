@@ -544,6 +544,20 @@ from - @'.$messageobj['message']['from']['username'].'
 
     	return;
     }
+    if ($request_message == '/purge') {
+        $deleter_name = '@' . $messageobj['message']['from']['username'];
+        if ($deleter_name != '@RamdeshLota' && $deleter_name != '@kulendraj') {
+            $reply = urlencode($deleter_name . ', you are not my Father nor are you the Destroyer of Worlds to run a purge. Begone!');
+            send_curl(build_response($chat_id, $reply));
+
+            return;
+        }
+        $db->setQuery('delete * from farms where farm_group=' . $chat_id);
+        $db->loadResult();
+        send_curl(build_response($chat_id, urlencode("The Purge has run.")));
+
+        return;
+    }
 
 
     if ($request_message == '/help' || $request_message == '/help@SLEnlFarmBot' || $request_message == '/start@SLEnlFarmBot') {
