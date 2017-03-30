@@ -13,8 +13,10 @@
  // 1 = all logs
  define ("DEBUGLVL", 0);
 
+ define('ACCESS_TOKEN', "112493740:AAHHFH1HHM95-HgSbVoibojcA6L3AsbhfaI");
+
 function build_response($chat_id, $text) {
-    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+    $returnvalue = 'https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendMessage?chat_id='
             . $chat_id . '&text=' . $text;
     return $returnvalue;
 }
@@ -22,12 +24,12 @@ function build_response_keyboard($chat_id, $text, $message_id, $markup) {
     $markup['resize_keyboard'] = true;
     $markup['one_time_keyboard'] = true;
     $markup['selective'] = true;
-    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+    $returnvalue = 'https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendMessage?chat_id='
         . $chat_id . '&text=' . $text . '&reply_to_message_id=' . $message_id . '&reply_markup=' . json_encode($markup);
     return $returnvalue;
 }
 function build_location_response($chat_id, $location) {
-    $returnvalue = 'https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendLocation?chat_id='
+    $returnvalue = 'https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendLocation?chat_id='
         . $chat_id .'&longitude=' . $location['longitude'] . '&latitude='.$location['latitude'];
     return $returnvalue;
 }
@@ -97,6 +99,12 @@ function easter_eggs($farmer_name) {
     }
     if ($farmer_name == '@Nisal') {
         $reply .= urlencode('Nisal will be coming for farming provided he doesn\'t get in to some freak accident on the way. 
+');
+    }if ($farmer_name == '@Sidu91') {
+        $reply .= urlencode('🐼 Panda the Silent Sniper  is Coming to farm.
+');
+    }if ($farmer_name == '@sam356') {
+        $reply .= urlencode('Yo! Sam the head of Green MvTvRv niggas coming to farm.
 ');
     }
     return $reply;
@@ -199,14 +207,14 @@ http://myteams.website/teams/8qIqaqwnZurf');
     }
 
 	if ($chat_id == $user_id) {	
-	$reply = urlencode('This is not a Group Please add me to a Group to set up your farming session.
+	$reply = urlencode('This is not a group. Please add me to a group. to set up your farming session. Your chat id is ' . $chat_id . '
 https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
 	send_curl(build_response($chat_id, $reply));
 		return;
 	}
 	if ($request_message == 'Cancel') {	
 	$markup['hide_keyboard'] = true;
-	send_curl('https://api.telegram.org/bot112493740:AAGW9ZOjyfJZh-DJZ-HYW2aJDLuVs2_wwBE/sendMessage?chat_id='
+	send_curl('https://api.telegram.org/bot'. ACCESS_TOKEN. '/sendMessage?chat_id='
         . $chat_id . '&text=👍&reply_markup=' . json_encode($markup));
 		return;
 	}
@@ -541,6 +549,20 @@ from - @'.$messageobj['message']['from']['username'].'
         
 
     	return;
+    }
+    if ($request_message == '/purge') {
+        $deleter_name = '@' . $messageobj['message']['from']['username'];
+        if ($deleter_name != '@RamdeshLota' && $deleter_name != '@kulendraj') {
+            $reply = urlencode($deleter_name . ', you are not my Father nor are you the Destroyer of Worlds to run a purge. Begone!');
+            send_curl(build_response($chat_id, $reply));
+
+            return;
+        }
+        $db->setQuery('delete from farms where farm_group=' . $chat_id);
+        $db->loadResult();
+        send_curl(build_response($chat_id, urlencode("The Purge has run.")));
+
+        return;
     }
 
 
