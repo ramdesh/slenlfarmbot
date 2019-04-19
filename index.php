@@ -68,17 +68,8 @@ function build_farm_message($id) {
 }
 function easter_eggs($farmer_name) {
     $reply = "";
-
-    if ($farmer_name == '@sirStinkySocks') {
-        $reply .= urlencode('Welonde Uncle!!
-');
-    }
     if ($farmer_name == '@SLpooh') {
         $reply .= urlencode('Gus n galz v r settng up framing fr 2day.
-');
-    }
-    if ($farmer_name == '@thushethan') {
-        $reply .= urlencode('This Bot has been verified by the SL ENL Security Experts Incompetency Group (SESEIG™).
 ');
     }
     if ($farmer_name == '@ultrasn0w') {
@@ -95,10 +86,6 @@ function easter_eggs($farmer_name) {
     }
     if ($farmer_name == '@painkillerSL') {
         $reply .= urlencode('The Painkiller Army knows no boundaries. They know no fear. 
-');
-    }
-    if ($farmer_name == '@Nisal') {
-        $reply .= urlencode('Nisal will be coming for farming provided he doesn\'t get in to some freak accident on the way. 
 ');
     }
     return $reply;
@@ -333,10 +320,6 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
                 return;
             }
 
-            if ($farmer_name == '@Cyan017'){
-                $reply .= urlencode('Yeah right, like that lazy bugger is going to come for a farm. Pigs will fly!');
-            }
-
             $reply .= easter_eggs($farmer_name);
             $farmer = new stdClass();
             $farmer->farm_id = $currentfarm['id'];
@@ -354,10 +337,6 @@ https://telegram.me/SlEnlFarmbot?startgroup=addmetogroup');
                 send_curl(build_response($chat_id, $reply));
 
                 return;
-            }
-
-            if ($farmer_name == '@Cyan017'){
-                $reply .= urlencode('Hahaha I knew that lazy ass @Cyan017 would never come for a farm!');
             }
 
             $db->setQuery("delete from farmers where farmer_name like '$farmer_name%' and farm_id=" . $currentfarm['id'])->loadResult();
