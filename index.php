@@ -507,7 +507,7 @@ Thank you!');
     		return;
     	} 
     	
-    	$reply = urlencode('Dear Enlightened LK member,
+    	$reply = urlencode('Dear Enlightened LK member:
 Your suggestion for improvement has been received and will be processed in the distant future (although this is unlikely). 
 In the meantime, please be sure to obtain approval from the SL ENL Security Experts Incompetency Group (SESEIG™), 
 as there may be unforeseen and unfathomable dangers associated with your change request. 
