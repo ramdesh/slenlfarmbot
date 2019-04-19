@@ -1,0 +1,26 @@
+{
+  "name": "slenlfarmbot",
+  "version": "0.1.0",
+  "description": "SL ENL Farm Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ramdesh:typhlosion@88@github.com/ramdesh/slenlfarmbot.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot"
+  ],
+  "author": "Ramindu Deshapriya <rasade88@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ramdesh/slenlfarmbot/issues"
+  },
+  "homepage": "https://github.com/ramdesh/slenlfarmbot#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
