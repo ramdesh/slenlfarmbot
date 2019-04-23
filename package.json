@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ramdesh/slenlfarmbot#readme",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "mongodb": "^3.2.3"
   }
 }
