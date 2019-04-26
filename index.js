@@ -8,6 +8,8 @@ const BOT_ACCESS_TOKEN = process.env.BOT_ACCESS_TOKEN;
 const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
 
+const TG_URL = 'https://api.telegram.org/bot'+ BOT_ACCESS_TOKEN + '/sendMessage';
+
 const MongoClient = mongodb.MongoClient;
 let db = null;
 
@@ -119,14 +121,16 @@ const messageProcessor = {
       '1. ' + farmer;
   },
   replyChainHandler: {
+    '/farming': async(db, message) => {
 
+    }
   }
 
 };
 
-async function sendHttp(url) {
+async function sendHttp(messageBody) {
   try {
-    let response = await axios.get(url);
+    let response = await axios.post(TG_URL, messageBody, { headers: {'Content-Type': 'application/json'}});
     return {
       "statusCode" : 200,
       "body" : JSON.stringify({message: "This is the SL ENL Farm Bot"}),
@@ -144,21 +148,42 @@ async function sendHttp(url) {
 
 }
 function buildResponse(chatId, text) {
-  return 'https://api.telegram.org/bot'+ BOT_ACCESS_TOKEN + '/sendMessage?chat_id='
-    + chatId + '&text=' + text;
+  return {
+    chat_id: chatId,
+    text: text
+  };
+}
+async function buildSingleFarmMessage(db, farmId) {
+  try {
+    let farm = await db.collection('farms').find({_id: farmId}).limit(1).toArray()[0];
+    let farmers = await db.collection('farmers').find({farm_id: farmId}).toArray();
+    let responseText = 'Farm - ' + farm['location'] + ' ' + farm['date_and_time'] + '\n' +
+      'Farm creator - ' + farm['creator'];
+    for(let i = 1; i <= farmers.length; i++) {
+      responseText += '\n' + i + '. '+ farmers[i-1]['farmer_name'];
+    }
+    return await responseText;
+  } catch(err) {
+    console.error(err);
+    return await 'There was a problem fetching farm details';
+  }
+}
+async function buildFarmListKeyboard(db, chatId) {
+
 }
 
 exports.handler = async (req) => {
   db = await initDb();
   try {
     let chatBody = JSON.parse(req.body);
-    if(chatBody.message.text.startsWith('/')) {
-      let chatId = chatBody.message.chat.id;
-      let splitByAt = chatBody.message.text.split('@');
-      let firstPart = splitByAt[0].split(' ');
-      let responseText = await messageProcessor[firstPart[0]](db, chatBody.message);
-      return sendHttp(encodeURI(buildResponse(chatId, responseText)));
+    let chatId = chatBody.message.chat.id;
+    let splitByAt = chatBody.message.text.split('@');
+    let firstPart = splitByAt[0].split(' ');
+    if(!messageProcessor[firstPart[0]]) {
+      return sendHttp(buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
     }
+    let responseText = await messageProcessor[firstPart[0]](db, chatBody.message);
+    return sendHttp(buildResponse(chatId, responseText));
   } catch(err) {
     console.error(err);
     return {
