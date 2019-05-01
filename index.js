@@ -21,24 +21,14 @@ async function initDb() {
     console.error(err);
   }
 }
-const sequenceCommands = [
-  '/farming',
-  '/addmetofarm',
-  '/removemefromfarm',
-  '/deletefarm',
-  '/setfarmlocation',
-  '/setfarmtime',
-  '/addfarmer',
-  '/removefarmer',
-  '/icametofarm'
-];
 //This object is used to store the questions to be asked when a user sends a message which would require secondary processing for farm selection.
 //response - Farm selection question - this is used in later processing to identify which message the bot should reply to
 // parts - How many segments should there be other than the request message - this is used for validation.
 // error - Response to send if validation on message segments fails.
 const selectionQuestions = {
   '/farming': {
-    response: 'Which farm do you want the details of?',
+    response: Constants.REPLY_CHAIN_CODES['/farming'] +
+      '|Which farm do you want the details of?',
     parts: 0,
     error: null
   },
@@ -120,10 +110,14 @@ const messageProcessor = {
     return await farmer + ' created a farm - ' + location + ' ' + time + '.\n' +
       '1. ' + farmer;
   },
-  replyChainHandler: {
-    '/farming': async(db, message) => {
-
+  initiateChain: async(command, db, message) => {
+    let keyboardMarkup = await buildFarmListKeyboard(command, db, message.chat.id);
+    if(keyboardMarkup) {
+      return await buildResponse(message.chat.id, selectionQuestions[command].response, keyboardMarkup);
+    } else {
+      return await buildResponse(message.chat.id, Constants.NO_FARMS_MSG);
     }
+
   }
 
 };
@@ -138,20 +132,20 @@ async function sendHttp(messageBody) {
     };
   } catch(err) {
     console.error(err);
-    return {
-      "statusCode" : 200,
-      "body" : JSON.stringify({message: "This is the SL ENL Farm Bot"}),
-      "isBase64Encoded": false
-    };
+    return Constants.GEN_RESP;
   }
 
 
 }
-function buildResponse(chatId, text) {
-  return {
+function buildResponse(chatId, text, replyMarkup = undefined) {
+  let response = {
     chat_id: chatId,
     text: text
   };
+  if (replyMarkup) {
+    response.reply_markup = replyMarkup;
+  }
+  return response;
 }
 async function buildSingleFarmMessage(db, farmId) {
   try {
@@ -165,34 +159,87 @@ async function buildSingleFarmMessage(db, farmId) {
     return await responseText;
   } catch(err) {
     console.error(err);
-    return await 'There was a problem fetching farm details';
+    return await Constants.ERR_MSG;
   }
 }
-async function buildFarmListKeyboard(db, chatId) {
+async function buildFarmListKeyboard(command, db, chatId) {
+  let inlineKeyboard = [];
+  try {
+    let farms = await db.collection('farms').find({farm_group: chatId, current: 1}).toArray();
+    if(farms.length > 0) {
+      farms.forEach(farm => {
+        inlineKeyboard.push([{
+          text: farm['location'] + ' ' + farm['date_and_time'],
+          callback_data: command + '|' + farm['_id']
+        }])
+      });
+      return await { inline_keyboard: inlineKeyboard };
+    } else return await null;
 
+  } catch(err) {
+    console.error(err);
+    return await Constants.ERR_MSG;
+  }
 }
 
 exports.handler = async (req) => {
   db = await initDb();
   try {
     let chatBody = JSON.parse(req.body);
-    let chatId = chatBody.message.chat.id;
-    let splitByAt = chatBody.message.text.split('@');
-    let firstPart = splitByAt[0].split(' ');
-    if(!messageProcessor[firstPart[0]]) {
-      return sendHttp(buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
+    let cmd = '';
+    if(chatBody.callback_query) {
+      chatBody = chatBody.callback_query;
+      let queryParts = chatBody.data.split('|');
+      cmd = queryParts[0];
+    } else {
+      let chatId = chatBody.message.chat.id;
+      let splitByAt = chatBody.message.text.split('@');
+      let firstPart = splitByAt[0].split(' ');
+      cmd = firstPart[0];
+      if(!messageProcessor[cmd] && !selectionQuestions[cmd]) {
+        return sendHttp(buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
+      }
+      if(selectionQuestions[cmd]) {
+        let chainResponse = await messageProcessor.initiateChain(cmd, db, chatBody.message);
+        return sendHttp(chainResponse);
+      } else {
+        let responseText = await messageProcessor[cmd](db, chatBody.message);
+        return sendHttp(buildResponse(chatId, responseText));
+      }
     }
-    let responseText = await messageProcessor[firstPart[0]](db, chatBody.message);
-    return sendHttp(buildResponse(chatId, responseText));
+
   } catch(err) {
     console.error(err);
-    return {
-      "statusCode" : 200,
-      "body" : JSON.stringify({message: "This is the SL ENL Farm Bot"}),
-      "isBase64Encoded": false
-    };
+    return Constants.GEN_RESP;
   }
 
 
 
 };
+
+/**
+ * callback from inline button:
+{
+    update_id: 89119936,
+    callback_query: {
+        id: '272632906681473807',
+        from: {
+            id: 63477295,
+            is_bot: false,
+            first_name: 'Ramindu [RamdeshLota|SL]',
+            last_name: 'Deshapriya',
+            username: 'RamdeshLota',
+            language_code: 'en'
+        },
+        message: {
+            message_id: 71125,
+            from: [Object],
+            chat: [Object],
+            date: 1556744461,
+            text: 'Which farm do you want the details of?'
+        },
+        chat_instance: '-2749590899155798484',
+        data: 'BihHYd2m1'
+    }
+}
+ */
