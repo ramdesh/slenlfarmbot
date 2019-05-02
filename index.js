@@ -27,8 +27,7 @@ async function initDb() {
 // error - Response to send if validation on message segments fails.
 const selectionQuestions = {
   '/farming': {
-    response: Constants.REPLY_CHAIN_CODES['/farming'] +
-      '|Which farm do you want the details of?',
+    response: 'Which farm do you want the details of?',
     parts: 0,
     error: null
   },
