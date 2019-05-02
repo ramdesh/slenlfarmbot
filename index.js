@@ -110,6 +110,12 @@ const messageProcessor = {
     return await farmer + ' created a farm - ' + location + ' ' + time + '.\n' +
       '1. ' + farmer;
   },
+  secondary: {
+    '/farming': async(db, msgParts) => {
+      let farmId = msgParts[1];
+      return await buildSingleFarmMessage(db, farmId);
+    }
+  },
   initiateChain: async(command, db, message) => {
     let keyboardMarkup = await buildFarmListKeyboard(command, db, message.chat.id);
     if(keyboardMarkup) {
@@ -149,8 +155,9 @@ function buildResponse(chatId, text, replyMarkup = undefined) {
 }
 async function buildSingleFarmMessage(db, farmId) {
   try {
-    let farm = await db.collection('farms').find({_id: farmId}).limit(1).toArray()[0];
+    let farms = await db.collection('farms').find({_id: farmId}).toArray();
     let farmers = await db.collection('farmers').find({farm_id: farmId}).toArray();
+    let farm = farms[0];
     let responseText = 'Farm - ' + farm['location'] + ' ' + farm['date_and_time'] + '\n' +
       'Farm creator - ' + farm['creator'];
     for(let i = 1; i <= farmers.length; i++) {
@@ -188,9 +195,17 @@ exports.handler = async (req) => {
     let chatBody = JSON.parse(req.body);
     let cmd = '';
     if(chatBody.callback_query) {
+      // This is a message sent through the inline keyboard
       chatBody = chatBody.callback_query;
+      let chatId = chatBody.message.chat.id;
       let queryParts = chatBody.data.split('|');
       cmd = queryParts[0];
+      if(!messageProcessor.secondary[cmd]) {
+        return sendHttp(buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
+      } else {
+        let txt = await messageProcessor.secondary[cmd](db, queryParts);
+        return sendHttp(buildResponse(chatId, txt));
+      }
     } else {
       let chatId = chatBody.message.chat.id;
       let splitByAt = chatBody.message.text.split('@');
@@ -219,7 +234,7 @@ exports.handler = async (req) => {
 
 /**
  * callback from inline button:
-{
+ {
     update_id: 89119936,
     callback_query: {
         id: '272632906681473807',
