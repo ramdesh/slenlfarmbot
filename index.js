@@ -130,16 +130,16 @@ const messageProcessor = {
       '/help - Display this help text.';
   },
   secondary: {
-    '/farming': async(db, msgParts) => {
+    '/farming': async (db, msgParts) => {
       let farmId = msgParts[1];
       return await buildSingleFarmMessage(db, farmId);
     },
-    '/addmetofarm': async(db, msgParts) => {
+    '/addmetofarm': async (db, msgParts) => {
       let farmId = msgParts[1];
       let farmer = msgParts[2];
       try {
-        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
-        if(farmers.length > 0) {
+        let farmers = await db.collection('farmers').find({farm_id: farmId, farmer_name: farmer}).toArray();
+        if (farmers.length > 0) {
           return await buildSingleFarmMessage(db, farmId, farmer + ' has already been added to this farm.');
         }
         await db.collection('farmers').insertOne({
@@ -147,17 +147,17 @@ const messageProcessor = {
           farmer_name: farmer
         });
         return await buildSingleFarmMessage(db, farmId, 'Added ' + farmer + '.');
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         return await 'There was an error updating the farm.';
       }
     },
-    '/removemefromfarm': async(db, msgParts) => {
+    '/removemefromfarm': async (db, msgParts) => {
       let farmId = msgParts[1];
       let farmer = msgParts[2];
       try {
-        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
-        if(farmers.length === 0) {
+        let farmers = await db.collection('farmers').find({farm_id: farmId, farmer_name: farmer}).toArray();
+        if (farmers.length === 0) {
           return await buildSingleFarmMessage(db, farmId, farmer + ' is not in this farm anyway.');
         }
         await db.collection('farmers').deleteOne({
@@ -165,17 +165,17 @@ const messageProcessor = {
           farmer_name: farmer
         });
         return await buildSingleFarmMessage(db, farmId, 'Removed ' + farmer + '.');
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         return await 'There was an error updating the farm.';
       }
     },
-    '/addfarmer': async(db, msgParts) => {
+    '/addfarmer': async (db, msgParts) => {
       let farmId = msgParts[1];
       let farmer = msgParts[2];
       try {
-        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
-        if(farmers.length > 0) {
+        let farmers = await db.collection('farmers').find({farm_id: farmId, farmer_name: farmer}).toArray();
+        if (farmers.length > 0) {
           return await buildSingleFarmMessage(db, farmId, farmer + ' has already been added to this farm.');
         }
         await db.collection('farmers').insertOne({
@@ -183,17 +183,17 @@ const messageProcessor = {
           farmer_name: farmer
         });
         return await buildSingleFarmMessage(db, farmId, 'Added ' + farmer + '.');
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         return await 'There was an error updating the farm.';
       }
     },
-    '/removefarmer': async(db, msgParts) => {
+    '/removefarmer': async (db, msgParts) => {
       let farmId = msgParts[1];
       let farmer = msgParts[2];
       try {
-        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
-        if(farmers.length === 0) {
+        let farmers = await db.collection('farmers').find({farm_id: farmId, farmer_name: farmer}).toArray();
+        if (farmers.length === 0) {
           return await buildSingleFarmMessage(db, farmId, farmer + ' is not in this farm anyway.');
         }
         await db.collection('farmers').deleteOne({
@@ -201,17 +201,53 @@ const messageProcessor = {
           farmer_name: farmer
         });
         return await buildSingleFarmMessage(db, farmId, 'Removed ' + farmer + '.');
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         return await 'There was an error updating the farm.';
       }
     },
-    '/deletefarm': async(db, msgParts) => {
+    '/setfarmlocation': async (db, msgParts) => {
+      let farmId = msgParts[1];
+      let location = msgParts[2];
+      try {
+        await db.collection('farms').updateOne({_id: farmId}, {$set: {location: location}});
+        return await buildSingleFarmMessage(db, farmId, 'Updated farm location.');
+      } catch (err) {
+        console.error(err);
+        return await 'There was an error updating the farm.';
+      }
+    },
+    '/setfarmtime': async (db, msgParts) => {
+      let farmId = msgParts[1];
+      let dateAndTime = msgParts[2] + ' ' + msgParts[3];
+      try {
+        await db.collection('farms').updateOne({_id: farmId}, {$set: {date_and_time: dateAndTime}});
+        return await buildSingleFarmMessage(db, farmId, 'Updated date and time.');
+      } catch (err) {
+        console.error(err);
+        return await 'There was an error updating the farm.';
+      }
+    },
+    '/deletefarm': async (db, msgParts) => {
       let farmId = msgParts[1];
       try {
-        await db.collection('farms').updateOne({ _id: farmId }, { $set: { current: 0 }} );
+        await db.collection('farms').updateOne({_id: farmId}, {$set: {current: 0}});
         return await 'Deleted farm.';
-      } catch(err) {
+      } catch (err) {
+        console.error(err);
+        return await 'There was an error deleting the farm.';
+      }
+    },
+    '/icametofarm': async (db, msgParts) => {
+      let farmId = msgParts[1];
+      let farmer = msgParts[2];
+      try {
+        await db.collection('farmers').updateOne({
+          farm_id: farmId,
+          farmer_name: farmer
+        }, {$set: {farmer_name: farmer + ' - arrived'}});
+        return await buildSingleFarmMessage(db, farmId, farmer + ' has arrived.');
+      } catch (err) {
         console.error(err);
         return await 'There was an error deleting the farm.';
       }
