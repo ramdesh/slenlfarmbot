@@ -112,6 +112,7 @@ const messageProcessor = {
         location: location,
         creator: farmer,
         farm_group: message.chat.id,
+        farm_group_name: message.chat.title,
         current: 1
       });
       await db.collection('farmers').insertOne({
@@ -134,6 +135,24 @@ const messageProcessor = {
       '/removefarmer USERNAME - Removes the given username from the selected farm.\n' +
       '/deletefarm - Deletes the selected farm. \n' +
       '/help - Display this help text.';
+  },
+  '/getallfarms': async(db, message) => {
+    let chatId = message.chat.id;
+    if(chatId !== -27924249) {
+      return await 'This command is not allowed.';
+    }
+    try {
+      let farms = await db.collection('farms').find({}).toArray();
+      let responseText = 'Complete list of farms. \n';
+      for(let i = 1; i <= farms.length; i++) {
+        responseText += i + '. ' + farms[i]['location'] + ' ' + farms[i]['date_and_time'] +
+          ' - created by ' + farms[i]['creator'] + ' in ' + farms[i]['farm_group_name'] + '\n';
+      }
+      return await responseText;
+    } catch(err) {
+      console.error(err);
+      return await 'Unidentified error, friend.';
+    }
   },
   secondary: {
     '/farming': async (db, msgParts) => {
