@@ -26,6 +26,7 @@ async function initDb() {
 //response - Farm selection question - this is used in later processing to identify which message the bot should reply to
 // parts - How many segments should there be other than the request message - this is used for validation.
 // error - Response to send if validation on message segments fails.
+// isSelfService - This refers to commands where the user ID needs to be propagated through
 const selectionQuestions = {
   '/farming': {
     response: 'Which farm do you want the details of?',
@@ -82,7 +83,12 @@ const selectionQuestions = {
     isSelfService: true
   }
 };
-
+/**
+ * The message processor is categorized based on the command.
+ * Functions are invoked based on the function associated with each command.
+ * Secondary function are the second step in a command chain.
+ *
+ */
 const messageProcessor = {
   '/createfarm': async(db, message) => {
     let messageParts = message.text.split(' ');
@@ -253,6 +259,13 @@ const messageProcessor = {
       }
     }
   },
+  /**
+   * Initiates a command chain - first step
+   * @param command The command issued to start the command chain
+   * @param db Database handle
+   * @param message The message sent to the bot
+   * @returns The response object to be sent to Telegram
+   */
   initiateChain: async(command, db, message) => {
     let split = message.text.split(' ');
     let msgParts = split.length > 1 ? split.slice(1, split.length) : [];
@@ -260,6 +273,7 @@ const messageProcessor = {
       return await buildResponse(message.chat.id, selectionQuestions[command].error);
     }
     if(selectionQuestions[command].isSelfService) {
+      // If it's a self-service command, we need to add the sender's username to callback data
       msgParts.push('@' + message.from.username);
     }
     let keyboardMarkup =
@@ -317,6 +331,15 @@ async function buildSingleFarmMessage(db, farmId, extra = undefined) {
     return await Constants.ERR_MSG;
   }
 }
+
+/**
+ * Builds inline keyboard markup for a farm list.
+ * @param command Command that triggered the generation of the keyboard - needed to add to callback data
+ * @param db Database handle
+ * @param chatId Chat ID
+ * @param messageParts Parts of the message sent as an array - minus command component
+ * @returns Keyboard markup
+ */
 async function buildFarmListKeyboard(command, db, chatId, messageParts = []) {
   let inlineKeyboard = [];
   try {
@@ -365,13 +388,16 @@ exports.handler = async (req) => {
       /*if(chatId !== -27924249) {
         return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, Constants.MAINTENANCE_MSG));
       }*/
+      // handle scenarios where @SLEnlFarmbot is sent. e.g. /farming@SLEnlFarmbot
       let splitByAt = chatBody.message.text.split('@');
+      // Split message in to command + components
       let firstPart = splitByAt[0].split(' ');
       cmd = firstPart[0];
       if(!messageProcessor[cmd] && !selectionQuestions[cmd]) {
         return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
       }
       if(selectionQuestions[cmd]) {
+        // This command starts a chain
         let chainResponse = await messageProcessor.initiateChain(cmd, db, chatBody.message);
         return sendHttp(TG_SENDMESSAGE, chainResponse);
       } else {
