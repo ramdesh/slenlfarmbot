@@ -4,5 +4,5 @@ This is a Telegram bot that helps the SL ENL organize farming sessions. After ad
 
 ### Build Status
 
-[ ![Codeship Status for ramdesh/slenlfarmbot](https://codeship.com/projects/1a5bb4c0-3453-0133-927c-127922174191/status?branch=master)](https://codeship.com/projects/100474)
+[![Codeship Status for ramdesh/slenlfarmbot](https://app.codeship.com/projects/14beeac0-44e2-0137-d0b9-62433a311d04/status?branch=master)](https://app.codeship.com/projects/337045)
 
