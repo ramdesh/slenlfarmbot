@@ -8,7 +8,8 @@ const BOT_ACCESS_TOKEN = process.env.BOT_ACCESS_TOKEN;
 const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
 
-const TG_URL = 'https://api.telegram.org/bot'+ BOT_ACCESS_TOKEN + '/sendMessage';
+const TG_SENDMESSAGE = 'https://api.telegram.org/bot'+ BOT_ACCESS_TOKEN + '/sendMessage';
+const TG_EDITMARKUP = 'https://api.telegram.org/bot'+ BOT_ACCESS_TOKEN + '/editMessageReplyMarkup';
 
 const MongoClient = mongodb.MongoClient;
 let db = null;
@@ -29,47 +30,56 @@ const selectionQuestions = {
   '/farming': {
     response: 'Which farm do you want the details of?',
     parts: 0,
-    error: null
+    error: null,
+    isSelfService: false
   },
   '/addmetofarm': {
     response: 'Which farm do you want to be added to?',
     parts: 0,
-    error: null
+    error: null,
+    isSelfService: true
   },
   '/removemefromfarm': {
     response: 'Which farm do you want to be removed from?',
     parts: 0,
-    error: null
+    error: null,
+    isSelfService: true
   },
   '/deletefarm': {
     response: 'Which farm do you want to delete?',
     parts: 0,
-    error: null
+    error: null,
+    isSelfService: false
   },
   '/setfarmlocation': {
     response: 'Which farm do you want to set the location for?',
     parts: 1,
-    error: 'You need to specify a location. Use /setfarmlocation LOCATION.'
+    error: 'You need to specify a location. Use /setfarmlocation LOCATION.',
+    isSelfService: false
   },
   '/setfarmtime': {
     response: 'Which farm do you want to set the time for?',
     parts: 2,
-    error: 'You need to specify a date and time. Use /setfarmtime DATE TIME.'
+    error: 'You need to specify a date and time. Use /setfarmtime DATE TIME.',
+    isSelfService: false
   },
   '/addfarmer': {
     response: 'Which farm do you want to add to?',
     parts: 1,
-    error: 'You need to specify who you need to add. Use /addfarmer FARMER_NAME.'
+    error: 'You need to specify who you need to add. Use /addfarmer FARMER_NAME.',
+    isSelfService: false
   },
   '/removefarmer': {
     response: 'Which farm do you want to remove from?',
     parts: 1,
-    error: 'You need to specify who you need to remove. Use /removefarmer FARMER_NAME.'
+    error: 'You need to specify who you need to remove. Use /removefarmer FARMER_NAME.',
+    isSelfService: false
   },
   '/icametofarm': {
     response: 'Which farm did you come to?',
     parts: 0,
-    error: null
+    error: null,
+    isSelfService: true
   }
 };
 
@@ -104,19 +114,120 @@ const messageProcessor = {
       });
     } catch(err) {
       console.error(err);
-      return await 'There was an error creating the farm.'
+      return await 'There was an error creating the farm.';
     }
     return await farmer + ' created a farm - ' + location + ' ' + time + '.\n' +
       '1. ' + farmer;
+  },
+  '/help': async(db, message) => {
+    return await 'This is the SL ENL Farming Bot created by @RamdeshLota. \nCommands: \n' +
+        '/createfarm LOCATION DATE TIME - Creates a new farm.\n' +
+      '/addmetofarm - Adds you to the current farm.\n' +
+      '/removemefromfarm - Removes you from the selected farm.\n' +
+      '/addfarmer USERNAME - Adds the given username to the farm.\n' +
+      '/removefarmer USERNAME - Removes the given username from the selected farm.\n' +
+      '/deletefarm - Deletes the selected farm. \n' +
+      '/help - Display this help text.';
   },
   secondary: {
     '/farming': async(db, msgParts) => {
       let farmId = msgParts[1];
       return await buildSingleFarmMessage(db, farmId);
+    },
+    '/addmetofarm': async(db, msgParts) => {
+      let farmId = msgParts[1];
+      let farmer = msgParts[2];
+      try {
+        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
+        if(farmers.length > 0) {
+          return await buildSingleFarmMessage(db, farmId, farmer + ' has already been added to this farm.');
+        }
+        await db.collection('farmers').insertOne({
+          farm_id: farmId,
+          farmer_name: farmer
+        });
+        return await buildSingleFarmMessage(db, farmId, 'Added ' + farmer + '.');
+      } catch(err) {
+        console.error(err);
+        return await 'There was an error updating the farm.';
+      }
+    },
+    '/removemefromfarm': async(db, msgParts) => {
+      let farmId = msgParts[1];
+      let farmer = msgParts[2];
+      try {
+        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
+        if(farmers.length === 0) {
+          return await buildSingleFarmMessage(db, farmId, farmer + ' is not in this farm anyway.');
+        }
+        await db.collection('farmers').deleteOne({
+          farm_id: farmId,
+          farmer_name: farmer
+        });
+        return await buildSingleFarmMessage(db, farmId, 'Removed ' + farmer + '.');
+      } catch(err) {
+        console.error(err);
+        return await 'There was an error updating the farm.';
+      }
+    },
+    '/addfarmer': async(db, msgParts) => {
+      let farmId = msgParts[1];
+      let farmer = msgParts[2];
+      try {
+        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
+        if(farmers.length > 0) {
+          return await buildSingleFarmMessage(db, farmId, farmer + ' has already been added to this farm.');
+        }
+        await db.collection('farmers').insertOne({
+          farm_id: farmId,
+          farmer_name: farmer
+        });
+        return await buildSingleFarmMessage(db, farmId, 'Added ' + farmer + '.');
+      } catch(err) {
+        console.error(err);
+        return await 'There was an error updating the farm.';
+      }
+    },
+    '/removefarmer': async(db, msgParts) => {
+      let farmId = msgParts[1];
+      let farmer = msgParts[2];
+      try {
+        let farmers = await db.collection('farmers').find({ farm_id: farmId, farmer_name: farmer}).toArray();
+        if(farmers.length === 0) {
+          return await buildSingleFarmMessage(db, farmId, farmer + ' is not in this farm anyway.');
+        }
+        await db.collection('farmers').deleteOne({
+          farm_id: farmId,
+          farmer_name: farmer
+        });
+        return await buildSingleFarmMessage(db, farmId, 'Removed ' + farmer + '.');
+      } catch(err) {
+        console.error(err);
+        return await 'There was an error updating the farm.';
+      }
+    },
+    '/deletefarm': async(db, msgParts) => {
+      let farmId = msgParts[1];
+      try {
+        await db.collection('farms').updateOne({ _id: farmId }, { $set: { current: 0 }} );
+        return await 'Deleted farm.';
+      } catch(err) {
+        console.error(err);
+        return await 'There was an error deleting the farm.';
+      }
     }
   },
   initiateChain: async(command, db, message) => {
-    let keyboardMarkup = await buildFarmListKeyboard(command, db, message.chat.id);
+    let split = message.text.split(' ');
+    let msgParts = split.length > 1 ? split.slice(1, split.length) : [];
+    if(msgParts.length < selectionQuestions[command].parts) {
+      return await buildResponse(message.chat.id, selectionQuestions[command].error);
+    }
+    if(selectionQuestions[command].isSelfService) {
+      msgParts.push('@' + message.from.username);
+    }
+    let keyboardMarkup =
+      await buildFarmListKeyboard(command, db, message.chat.id, msgParts);
     if(keyboardMarkup) {
       return await buildResponse(message.chat.id, selectionQuestions[command].response, keyboardMarkup);
     } else {
@@ -127,20 +238,14 @@ const messageProcessor = {
 
 };
 
-async function sendHttp(messageBody) {
+async function sendHttp(url, messageBody) {
   try {
-    let response = await axios.post(TG_URL, messageBody, { headers: {'Content-Type': 'application/json'}});
-    return {
-      "statusCode" : 200,
-      "body" : JSON.stringify({message: "This is the SL ENL Farm Bot"}),
-      "isBase64Encoded": false
-    };
+    let response = await axios.post(url, messageBody, { headers: {'Content-Type': 'application/json'}});
+    return await Constants.GEN_RESP;
   } catch(err) {
     console.error(err);
-    return Constants.GEN_RESP;
+    return await Constants.GEN_RESP;
   }
-
-
 }
 function buildResponse(chatId, text, replyMarkup = undefined) {
   let response = {
@@ -152,12 +257,20 @@ function buildResponse(chatId, text, replyMarkup = undefined) {
   }
   return response;
 }
-async function buildSingleFarmMessage(db, farmId) {
+function buildKillKeyboardResponse(chatId, messageId) {
+  return {
+    chat_id: chatId,
+    message_id: messageId,
+    reply_markup: { inline_keyboard: [] }
+  };
+}
+async function buildSingleFarmMessage(db, farmId, extra = undefined) {
   try {
     let farms = await db.collection('farms').find({_id: farmId}).toArray();
     let farmers = await db.collection('farmers').find({farm_id: farmId}).toArray();
     let farm = farms[0];
-    let responseText = 'Farm - ' + farm['location'] + ' ' + farm['date_and_time'] + '\n' +
+    let responseText = extra ? extra + '\n' : '';
+    responseText += 'Farm - ' + farm['location'] + ' ' + farm['date_and_time'] + '\n' +
       'Farm creator - ' + farm['creator'];
     for(let i = 1; i <= farmers.length; i++) {
       responseText += '\n' + i + '. '+ farmers[i-1]['farmer_name'];
@@ -168,7 +281,7 @@ async function buildSingleFarmMessage(db, farmId) {
     return await Constants.ERR_MSG;
   }
 }
-async function buildFarmListKeyboard(command, db, chatId) {
+async function buildFarmListKeyboard(command, db, chatId, messageParts = []) {
   let inlineKeyboard = [];
   try {
     let farms = await db.collection('farms').find({farm_group: chatId, current: 1}).toArray();
@@ -176,7 +289,7 @@ async function buildFarmListKeyboard(command, db, chatId) {
       farms.forEach(farm => {
         inlineKeyboard.push([{
           text: farm['location'] + ' ' + farm['date_and_time'],
-          callback_data: command + '|' + farm['_id']
+          callback_data: command + '|' + farm['_id'] + '|' + messageParts.join('|')
         }])
       });
       return await { inline_keyboard: inlineKeyboard };
@@ -197,28 +310,37 @@ exports.handler = async (req) => {
       // This is a message sent through the inline keyboard
       chatBody = chatBody.callback_query;
       let chatId = chatBody.message.chat.id;
+      let messageId = chatBody.message.message_id;
+      /*if(chatId !== -27924249) {
+        return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, Constants.MAINTENANCE_MSG));
+      }*/
       let queryParts = chatBody.data.split('|');
       cmd = queryParts[0];
       if(!messageProcessor.secondary[cmd]) {
-        return sendHttp(buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
+        await sendHttp(TG_EDITMARKUP, buildKillKeyboardResponse(chatId, messageId));
+        return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
       } else {
         let txt = await messageProcessor.secondary[cmd](db, queryParts);
-        return sendHttp(buildResponse(chatId, txt));
+        await sendHttp(TG_EDITMARKUP, buildKillKeyboardResponse(chatId, messageId));
+        return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, txt));
       }
     } else {
       let chatId = chatBody.message.chat.id;
+      /*if(chatId !== -27924249) {
+        return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, Constants.MAINTENANCE_MSG));
+      }*/
       let splitByAt = chatBody.message.text.split('@');
       let firstPart = splitByAt[0].split(' ');
       cmd = firstPart[0];
       if(!messageProcessor[cmd] && !selectionQuestions[cmd]) {
-        return sendHttp(buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
+        return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, 'Sorry, I didn\'t understand that command.'));
       }
       if(selectionQuestions[cmd]) {
         let chainResponse = await messageProcessor.initiateChain(cmd, db, chatBody.message);
-        return sendHttp(chainResponse);
+        return sendHttp(TG_SENDMESSAGE, chainResponse);
       } else {
         let responseText = await messageProcessor[cmd](db, chatBody.message);
-        return sendHttp(buildResponse(chatId, responseText));
+        return sendHttp(TG_SENDMESSAGE, buildResponse(chatId, responseText));
       }
     }
 
