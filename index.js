@@ -143,10 +143,10 @@ const messageProcessor = {
     }
     try {
       let farms = await db.collection('farms').find({current: 1}).toArray();
-      let responseText = 'Complete list of farms. \n';
+      let responseText = 'Complete list of active farms. \n';
       for(let i = 1; i <= farms.length; i++) {
-        responseText += i + '. ' + farms[i]['location'] + ' ' + farms[i]['date_and_time'] +
-          ' - created by ' + farms[i]['creator'] + ' in ' + farms[i]['farm_group_name'] + '\n';
+        responseText += i + '. ' + farms[i - 1]['location'] + ' ' + farms[i - 1]['date_and_time'] +
+          ' - created by ' + farms[i - 1]['creator'] + ' in ' + farms[i - 1]['farm_group_name'] + '\n';
       }
       return await responseText;
     } catch(err) {
