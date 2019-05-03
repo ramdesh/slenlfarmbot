@@ -95,7 +95,7 @@ const messageProcessor = {
     let farmer = '@' + message.from.username;
     let location = messageParts[1] ? messageParts[1] : undefined;
     let time = messageParts[2] && messageParts[3] ?
-      messageParts[1] + ' ' + messageParts[3] : undefined;
+      messageParts[2] + ' ' + messageParts[3] : undefined;
     if(!location) {
       return await 'You cannot set up a farm without specifying a location for it.' +
         'Use /createfarm LOCATION DATE TIME.';
