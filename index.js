@@ -142,7 +142,7 @@ const messageProcessor = {
       return await 'This command is not allowed.';
     }
     try {
-      let farms = await db.collection('farms').find({}).toArray();
+      let farms = await db.collection('farms').find({current: 1}).toArray();
       let responseText = 'Complete list of farms. \n';
       for(let i = 1; i <= farms.length; i++) {
         responseText += i + '. ' + farms[i]['location'] + ' ' + farms[i]['date_and_time'] +
