@@ -22,7 +22,7 @@
   "homepage": "https://github.com/ramdesh/slenlfarmbot#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "mongodb": "^3.2.3",
+    "mongodb": "^3.7.4",
     "shortid": "^2.2.14"
   }
 }
